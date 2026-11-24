@@ -2,6 +2,8 @@
 
 A free, offline property management app for UK landlords. Everything runs in your web browser and nothing is sent to a server.
 
+**Open the app: https://chf-4u.github.io/narly-properties/**
+
 ## What it records
 
 | Area | What you can keep |
