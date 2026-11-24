@@ -1,0 +1,1419 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Narly Properties</title>
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg">
+<script>/* apply the saved theme before the page draws (no flash) */try{var t=localStorage.getItem('narly-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<style>
+:root{--bg:#fafafa;--panel:#fff;--text:#0a0a0a;--muted:#6b6b6b;--line:#ebebeb;--line2:#d9d9d9;--hover:#f4f4f4;--ink:#0a0a0a;--onink:#fff;
+--ok:#15803d;--okbg:#ecfdf3;--warn:#a15c07;--warnbg:#fff7e6;--bad:#c0262d;--badbg:#fdeeee;--info:#262626;--infobg:#f2f2f2;--r:14px;--rs:10px;color-scheme:light}
+:root[data-theme="dark"]{--bg:#0a0a0a;--panel:#141414;--text:#f5f5f5;--muted:#9a9a9a;--line:#262626;--line2:#333;--hover:#1c1c1c;--ink:#f5f5f5;--onink:#0a0a0a;
+--ok:#4ade80;--okbg:#0f2a1a;--warn:#fbbf24;--warnbg:#2b2210;--bad:#f87171;--badbg:#2e1313;--info:#e5e5e5;--infobg:#222;color-scheme:dark}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a0a0a;--panel:#141414;--text:#f5f5f5;--muted:#9a9a9a;--line:#262626;--line2:#333;--hover:#1c1c1c;--ink:#f5f5f5;--onink:#0a0a0a;
+--ok:#4ade80;--okbg:#0f2a1a;--warn:#fbbf24;--warnbg:#2b2210;--bad:#f87171;--badbg:#2e1313;--info:#e5e5e5;--infobg:#222;color-scheme:dark}}
+#themeBtn{padding:7px 10px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.login-theme{position:fixed;top:16px;right:16px}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font:15px/1.5 "Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;letter-spacing:-.005em}
+a{color:var(--text);text-underline-offset:3px}
+h2,h3,h4{letter-spacing:-.02em}
+.ic{width:18px;height:18px;flex-shrink:0;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;vertical-align:-3px}
+/* top bar */
+.topbar{position:sticky;top:0;z-index:20;display:flex;gap:12px;align-items:center;height:60px;padding:0 20px;background:color-mix(in srgb,var(--panel) 88%,transparent);backdrop-filter:saturate(180%) blur(12px);-webkit-backdrop-filter:saturate(180%) blur(12px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text);white-space:nowrap}
+.brand img{width:30px;height:30px;border-radius:8px}
+.brand span{font-size:17px;letter-spacing:-.03em}
+.brand b{font-weight:700}
+.brand i{font-style:normal;font-weight:400;color:var(--muted)}
+.search{margin-left:auto;position:relative;max-width:320px;width:100%}
+.search .ic{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none;width:16px;height:16px}
+.search input{width:100%;padding:8px 12px 8px 34px;border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--text);font:inherit;font-size:14px;outline:none;transition:border-color .15s,background .15s}
+.search input:focus{border-color:var(--ink);background:var(--panel)}
+#menuBtn{display:none;border:0;background:none;padding:6px;color:var(--text)}
+#menuBtn .ic{width:22px;height:22px}
+/* layout */
+.layout{display:flex;min-height:calc(100vh - 60px)}
+nav{width:232px;flex-shrink:0;scrollbar-width:thin;scrollbar-color:var(--line2) transparent;background:var(--panel);border-right:1px solid var(--line);padding:14px 12px;position:sticky;top:60px;height:calc(100vh - 60px);overflow-y:auto}
+nav a{display:flex;align-items:center;gap:11px;padding:8px 12px;margin:1px 0;color:var(--muted);text-decoration:none;border-radius:var(--rs);font-size:14px;font-weight:500;transition:background .12s,color .12s}
+nav a:hover{background:var(--hover);color:var(--text)}
+nav a.on{background:var(--ink);color:var(--onink)}
+nav .grp{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding:16px 12px 6px;opacity:.8}
+main{flex:1;padding:28px 32px 60px;max-width:1240px;min-width:0}
+.phead{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.phead h2{margin:0;font-size:28px;font-weight:700;margin-right:auto;display:flex;align-items:center;gap:10px;letter-spacing:-.035em}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;margin-bottom:18px}
+.chead{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.chead h3,.card>h3{margin:0;font-size:16px;font-weight:650;margin-right:auto}
+.count{font-size:13px;color:var(--muted);font-weight:400}
+.muted{color:var(--muted)} .small{font-size:13px}
+/* buttons */
+button,.btn{font:inherit;font-size:14px;font-weight:500;padding:8px 14px;border-radius:999px;border:1px solid var(--line2);background:var(--panel);color:var(--text);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:7px;transition:background .12s,border-color .12s,transform .05s;white-space:nowrap}
+button:hover,.btn:hover{background:var(--hover);border-color:var(--ink)}
+button:active,.btn:active{transform:scale(.98)}
+button.primary,.btn.primary{background:var(--ink);color:var(--onink);border-color:var(--ink)}
+button.primary:hover,.btn.primary:hover{opacity:.85;background:var(--ink)}
+button.danger{color:var(--bad);border-color:color-mix(in srgb,var(--bad) 40%,transparent)}
+button.danger:hover{background:var(--badbg);border-color:var(--bad)}
+button.sm{padding:4px 11px;font-size:13px}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(138px,1fr));gap:12px;margin-bottom:18px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;text-decoration:none;color:var(--text);transition:border-color .15s,transform .15s}
+.stat:hover{border-color:var(--ink)}
+.stat span{display:block;color:var(--muted);font-size:13px;font-weight:500}
+.stat b{display:block;font-size:28px;font-weight:700;letter-spacing:-.04em;margin-top:2px}
+.cols2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+/* tables */
+.tbl-wrap{overflow-x:auto}
+.tbl{width:100%;border-collapse:collapse;font-size:14px}
+.tbl th{text-align:left;font-size:12px;font-weight:500;color:var(--muted);border-bottom:1px solid var(--line);padding:8px 10px}
+.tbl td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+.tbl tbody tr:last-child td{border-bottom:0}
+.tbl tr[data-open]{cursor:pointer}
+.tbl tr[data-open]:hover td{background:var(--hover)}
+.tbl .num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+/* badges */
+.b{display:inline-flex;align-items:center;gap:5px;padding:2px 9px;border-radius:999px;font-size:12px;font-weight:500;white-space:nowrap}
+.b::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.9}
+.b-ok{background:var(--okbg);color:var(--ok)} .b-warn{background:var(--warnbg);color:var(--warn)}
+.b-bad{background:var(--badbg);color:var(--bad)} .b-info{background:var(--infobg);color:var(--info)}
+.b-muted{background:var(--infobg);color:var(--muted)}
+/* alerts */
+.alerts{list-style:none;margin:0;padding:0}
+.alerts li{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}
+.alerts li .b{min-width:64px;justify-content:center}
+.alerts li:last-child{border:0}
+.alerts a{text-decoration:none;color:var(--text)}
+.alerts a:hover{text-decoration:underline}
+.empty{color:var(--muted);margin:6px 0;font-size:14px}
+.filter{width:100%;max-width:340px;padding:8px 14px;border:1px solid var(--line);border-radius:999px;background:var(--bg);color:var(--text);font:inherit;font-size:14px;margin-bottom:12px;outline:none}
+.filter:focus{border-color:var(--ink)}
+.matrix td,.matrix th{text-align:center}
+.matrix td:first-child,.matrix th:first-child{text-align:left}
+.matrix a{text-decoration:none}
+.kv{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px 24px}
+.kv div span{display:block;font-size:12px;color:var(--muted);margin-bottom:1px}
+.kv div{word-break:break-word;font-size:14px;font-weight:500}
+.notice{padding:12px 16px;border-radius:var(--rs);background:var(--infobg);color:var(--text);margin-bottom:18px;font-size:14px;border:1px solid var(--line)}
+.notice.warn{background:var(--warnbg);border-color:transparent} .notice.bad{background:var(--badbg);border-color:transparent}
+.progress{height:6px;background:var(--line);border-radius:6px;overflow:hidden;margin:6px 0 12px}
+.progress i{display:block;height:100%;background:var(--ink);border-radius:6px;transition:width .3s}
+.checklist{list-style:none;padding:0;margin:0}
+.checklist li{display:grid;grid-template-columns:26px 1fr 150px;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
+.checklist li:last-child{border:0}
+.checklist li.done .lbl{color:var(--muted);text-decoration:line-through}
+.checklist input[type=checkbox]{width:18px;height:18px;accent-color:var(--ink)}
+.checklist input[type=date]{padding:5px 8px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--text);font:inherit;font-size:13px}
+.checklist small{display:block;color:var(--muted);font-size:12px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
+.tabs a{padding:6px 14px;border-radius:999px;border:1px solid var(--line);text-decoration:none;color:var(--text);background:var(--panel);font-size:14px;font-weight:500}
+.tabs a.on{background:var(--ink);color:var(--onink);border-color:var(--ink)}
+details summary{cursor:pointer;margin-top:12px}
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);z-index:50;display:flex;align-items:flex-start;justify-content:center;padding:40px 12px;overflow-y:auto}
+.hidden{display:none!important}
+.mbox{background:var(--panel);border:1px solid var(--line);border-radius:20px;width:100%;max-width:760px;padding:24px 26px;box-shadow:0 24px 80px rgba(0,0,0,.25)}
+.mhead{display:flex;align-items:center;margin-bottom:16px}
+.mhead h2{margin:0;font-size:21px;font-weight:700;margin-right:auto}
+.x{border:0;font-size:24px;background:none;line-height:1;padding:4px 8px;color:var(--muted)}
+.x:hover{background:var(--hover);color:var(--text)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 16px}
+.field{display:flex;flex-direction:column;gap:5px;font-size:13px}
+.field>span{font-weight:500;color:var(--text)}
+.field.wide,.fsec{grid-column:1/-1}
+.field input,.field select,.field textarea{font:inherit;font-size:14px;padding:9px 12px;border:1px solid var(--line2);border-radius:var(--rs);background:var(--panel);color:var(--text);width:100%;outline:none;transition:border-color .15s,box-shadow .15s}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--ink);box-shadow:0 0 0 3px color-mix(in srgb,var(--ink) 10%,transparent)}
+.field input[readonly]{background:var(--bg);color:var(--muted)}
+.field small{color:var(--muted);font-size:12px}
+.field.chk{flex-direction:row;align-items:center;gap:10px}
+.field.chk input{width:18px;height:18px;accent-color:var(--ink)}
+.fsec{margin:14px 0 0;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);border-bottom:1px solid var(--line);padding-bottom:6px}
+.checks{display:flex;flex-wrap:wrap;gap:8px;padding:4px 0}
+.checks label{display:flex;gap:7px;align-items:center;font-weight:400;font-size:14px;border:1px solid var(--line2);border-radius:999px;padding:5px 12px;cursor:pointer}
+.checks input{accent-color:var(--ink)}
+.attach{margin-top:20px;border-top:1px solid var(--line);padding-top:14px}
+.attach h3{font-size:14px;font-weight:600;margin:0 0 8px}
+.attach input[type=file]{font:inherit;font-size:13px;color:var(--muted)}
+.files{list-style:none;padding:0;margin:0 0 8px}
+.files li{display:flex;gap:8px;align-items:center;padding:6px 0;font-size:14px;border-bottom:1px solid var(--line)}
+.files li:last-child{border:0}
+.files li span{margin-right:auto;word-break:break-all;display:flex;gap:8px;align-items:center}
+.mfoot{display:flex;gap:8px;margin-top:22px;flex-wrap:wrap}
+.mfoot .sp{flex:1}
+#lockBtn{padding:7px 12px}
+body.locked .topbar,body.locked .layout{display:none}
+#login:empty{display:none}
+#login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:var(--bg)}
+.login-card{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:36px 32px;width:100%;max-width:390px;display:flex;flex-direction:column;gap:14px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.06)}
+.login-card img{margin:0 auto;border-radius:14px}
+.login-card .field{text-align:left}
+.login-card h2{margin:0;font-size:24px;font-weight:700;letter-spacing:-.03em}
+.login-card button.primary{justify-content:center;padding:11px}
+.err{color:var(--bad);min-height:1em;margin:0;font-size:14px}
+#toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,8px);background:var(--ink);color:var(--onink);padding:10px 20px;border-radius:999px;font-size:14px;font-weight:500;opacity:0;transition:opacity .2s,transform .2s;pointer-events:none;z-index:60}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+.guide h3{margin:22px 0 6px;font-size:17px}
+.guide li{margin:5px 0;font-size:14px}
+.welcome{text-align:center;padding:48px 24px}
+.welcome img{width:72px;height:72px;border-radius:18px}
+.welcome h2{font-size:30px;font-weight:700;letter-spacing:-.04em;margin:18px 0 6px}
+.welcome ol{text-align:left;max-width:460px;margin:22px auto;padding-left:22px;line-height:1.9}
+@media (max-width:860px){
+ #menuBtn{display:inline-flex}
+ .topbar{padding:0 12px;gap:8px}
+ .brand span{display:none}
+ nav{position:fixed;top:60px;bottom:0;left:0;height:auto;z-index:30;transform:translateX(-100%);transition:transform .2s;box-shadow:8px 0 30px rgba(0,0,0,.12)}
+ nav.open{transform:none}
+ main{padding:18px 14px 60px}
+ .phead h2{font-size:24px;width:100%}
+ .cols2,.grid{grid-template-columns:minmax(0,1fr)}
+ .tbl thead{display:none}
+ .tbl tr{display:block;border-bottom:1px solid var(--line);padding:8px 0}
+ .tbl tbody tr:last-child{border:0}
+ .tbl td{display:flex;justify-content:space-between;gap:12px;border:0;padding:3px 4px;text-align:right}
+ .tbl td::before{content:attr(data-label);font-weight:500;color:var(--muted);text-align:left}
+ .checklist li{grid-template-columns:26px 1fr}
+ .checklist li input[type=date]{grid-column:2}
+ .mbox{padding:20px 18px;border-radius:18px}
+ #lockBtn span{display:none}
+}
+@media print{.topbar,nav,button,.filter,.tabs{display:none!important}main{padding:0}.card{break-inside:avoid;border-color:#ccc}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <button id="menuBtn" aria-label="Menu"><svg class="ic" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  <a class="brand" href="#/dashboard"><img src="icon.svg" alt=""><span><b>Narly</b> <i>Properties</i></span></a>
+  <label class="search"><svg class="ic" viewBox="0 0 24 24"><path d="M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4"/></svg><input id="globalSearch" type="search" placeholder="Search everything" aria-label="Search"></label>
+  <button id="themeBtn" data-act="theme" aria-label="Change theme"></button>
+  <button id="lockBtn" class="hidden" title="Lock now"><svg class="ic" viewBox="0 0 24 24"><path d="M6 11h12v10H6zM8.5 11V7.5a3.5 3.5 0 0 1 7 0V11"/></svg><span>Lock</span></button>
+</header>
+<div class="layout">
+  <nav id="nav"></nav>
+  <main id="main"><p class="muted">Loading…</p></main>
+</div>
+<div id="login"></div>
+<div id="modal" class="modal hidden"><div class="mbox" id="mbox"></div></div>
+<div id="toast"></div>
+<script>
+'use strict';
+/* ================= Helpers ================= */
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+const iso = d => { const z = new Date(d.getTime() - d.getTimezoneOffset() * 60000); return z.toISOString().slice(0, 10); };
+const todayStr = () => iso(new Date());
+const parseD = s => new Date(String(s).slice(0, 10) + 'T00:00:00');
+function addMonths(s, m) { const d = parseD(s), day = d.getDate(); d.setDate(1); d.setMonth(d.getMonth() + m); const last = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate(); d.setDate(Math.min(day, last)); return iso(d); }
+function addDays(s, n) { const d = parseD(s); d.setDate(d.getDate() + n); return iso(d); }
+const daysTo = s => Math.round((parseD(s) - parseD(todayStr())) / 86400000);
+const fmtDate = s => s ? parseD(s).toLocaleDateString('en-GB', {day:'numeric', month:'short', year:'numeric'}) : '';
+const fmtDT = s => s ? new Date(s).toLocaleString('en-GB', {weekday:'short', day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'}) : '';
+const money = n => '£' + (Number(n) || 0).toLocaleString('en-GB', {minimumFractionDigits:2, maximumFractionDigits:2});
+const badge = (t, k = 'muted') => `<span class="b b-${k}">${esc(t)}</span>`;
+const sum = (arr, f) => arr.reduce((a, x) => a + (Number(f(x)) || 0), 0);
+function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toast.h); toast.h = setTimeout(() => t.classList.remove('show'), 2200); }
+function download(name, content, type) { const b = content instanceof Blob ? content : new Blob([content], {type}); const u = URL.createObjectURL(b); const a = document.createElement('a'); a.href = u; a.download = name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(u), 5000); }
+const fmtSize = n => n > 1048576 ? (n / 1048576).toFixed(1) + ' MB' : Math.ceil(n / 1024) + ' KB';
+
+const ICONS = {
+  dashboard:'M4 4h7v8H4zM13 4h7v5h-7zM13 11h7v9h-7zM4 14h7v6H4z',
+  properties:'M3 11 12 4l9 7M5.5 9.5V20h13V9.5M10 20v-5h4v5',
+  compliance:'M12 3 5 6v6c0 4.5 3 7.5 7 9 4-1.5 7-4.5 7-9V6zM9 12l2 2 4-4',
+  utilities:'M13 3 5 14h6l-1 7 8-11h-6z',
+  viewings:'M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12zM12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6z',
+  tenants:'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21c0-4 4-6 8-6s8 2 8 6',
+  tenancies:'M14 3H6v18h12V7zM14 3v4h4M9 13h6M9 17h6',
+  inspections:'M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14zM20 20l-4-4',
+  maintenance:'M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z',
+  money:'M4 7h15a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zM4 7l12-3v3M16 13.5h1',
+  tasks:'M4 4h16v16H4zM8 12l3 3 5-6',
+  contacts:'M16 20v-1a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v1M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 20v-1a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8',
+  documents:'M3 7a1 1 0 0 1 1-1h5l2 2h9a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z',
+  guide:'M2 5h7a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H2zM22 5h-7a3 3 0 0 0-3 3v12a2 2 0 0 1 2-2h8z',
+  settings:'M4 7h9M17 7h3M4 12h3M11 12h9M4 17h11M19 17h1M15 5v4M9 10v4M17 15v4',
+  calendar:'M4 5h16v16H4zM4 10h16M8 3v4M16 3v4',
+  download:'M12 4v11M7 10l5 5 5-5M5 20h14', upload:'M12 20V9M7 14l5-5 5 5M5 4h14',
+  clip:'M20 11.5 12 19.5a5 5 0 0 1-7-7l8.5-8.5a3.3 3.3 0 0 1 4.7 4.7L9.7 17.2a1.7 1.7 0 0 1-2.4-2.4L15 7',
+  lock:'M6 11h12v10H6zM8.5 11V7.5a3.5 3.5 0 0 1 7 0V11', alert:'M12 4 2.5 20h19zM12 10v4.5M12 17.3v.2', check:'M5 12.5l4.5 4.5L19 7',
+  sun:'M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8zM12 2.5v2M12 19.5v2M4.6 4.6 6 6M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4',
+  moon:'M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z',
+  auto:'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 3v18',
+};
+const ico = n => `<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="${ICONS[n] || ''}"/></svg>`;
+
+/* ================= UK reference data ================= */
+const NATIONS = ['England', 'Wales', 'Scotland', 'Northern Ireland'];
+const CERT_TYPES = [
+  {v:'gas', s:'Gas', l:'Gas Safety Certificate (CP12)', months:12, core:true, req:true, when:p => p.hasGas},
+  {v:'eicr', s:'EICR', l:'Electrical safety report (EICR)', months:60, core:true, req:true},
+  {v:'epc', s:'EPC', l:'Energy Performance Certificate (EPC)', months:120, core:true, req:true},
+  {v:'alarms', s:'Alarms', l:'Smoke & CO alarm check', months:12, core:true, req:true},
+  {v:'insurance', s:'Insurance', l:'Landlord insurance', months:12, core:true},
+  {v:'legionella', s:'Legionella', l:'Legionella risk assessment', months:24, core:true},
+  {v:'hmo', s:'HMO', l:'HMO licence', months:60, core:true, req:true, when:p => p.isHMO},
+  {v:'licence', l:'Selective / additional licence', months:60},
+  {v:'registration', l:'Landlord registration (Rent Smart Wales / Scotland / NI / PRS database)', months:0},
+  {v:'buildings', l:'Buildings insurance', months:12},
+  {v:'rentguarantee', l:'Rent guarantee insurance', months:12},
+  {v:'boiler', l:'Boiler service', months:12},
+  {v:'pat', l:'PAT test (portable appliances)', months:12},
+  {v:'fra', l:'Fire risk assessment', months:12},
+  {v:'firealarm', l:'Fire alarm / emergency lighting service', months:12},
+  {v:'fuel', l:'Oil / solid fuel appliance check (OFTEC / HETAS)', months:12},
+  {v:'chimney', l:'Chimney sweep', months:12},
+  {v:'asbestos', l:'Asbestos survey', months:0},
+  {v:'other', l:'Other certificate / document', months:0},
+];
+const certType = k => CERT_TYPES.find(c => c.v === k) || {v:k, l:k || '?', months:0};
+const coreTypes = p => CERT_TYPES.filter(c => c.core && (!c.when || c.when(p)));
+const FREQ = {Monthly:{m:1}, Weekly:{d:7}, Fortnightly:{d:14}, '4-weekly':{d:28}, Quarterly:{m:3}};
+const PER_YEAR = {Monthly:12, Weekly:52, Fortnightly:26, '4-weekly':13, Quarterly:4};
+
+const ONBOARD = [
+  ['viewing', 'Viewing completed'],
+  ['application', 'Application form received'],
+  ['referencing', 'Referencing done (credit, employer, previous landlord, affordability)', 'Record the result on each tenant'],
+  ['rtr', 'Right to Rent check done for every adult (England)', 'Keep copies for the tenancy + 1 year'],
+  ['guarantor', 'Guarantor agreement signed (if needed)'],
+  ['holding', 'Holding deposit taken – max 1 week\'s rent (England)'],
+  ['agreement', 'Tenancy agreement / written statement of terms signed by all parties'],
+  ['deposit', 'Deposit received – max 5 weeks\' rent (annual rent under £50k)'],
+  ['protected', 'Deposit protected in a government scheme within 30 days', 'Ticks itself when you enter the protection date', t => !!t.depositProtectedDate],
+  ['pi', 'Deposit prescribed information served within 30 days', 'Ticks itself when you enter the date served', t => !!t.prescribedInfoDate],
+  ['epc', 'Copy of EPC given'],
+  ['gas', 'Copy of Gas Safety Certificate given (before move-in)'],
+  ['eicr', 'Copy of EICR given'],
+  ['govinfo', 'Required government information given (e.g. How to Rent guide / Renters\' Rights information sheet, as applicable)'],
+  ['alarms', 'Smoke & CO alarms tested on day one'],
+  ['inventory', 'Inventory & schedule of condition agreed and signed (with photos)'],
+  ['meters', 'Move-in meter readings taken (with photos)'],
+  ['utilities', 'Energy suppliers, water company & council tax told about new tenant'],
+  ['rentsetup', 'First rent received & standing order set up'],
+  ['keys', 'Keys handed over (note how many)'],
+  ['contacts', 'Tenant contact & emergency details recorded'],
+];
+const OFFBOARD = [
+  ['notice', 'Notice received / served and recorded (type, date, grounds)'],
+  ['valid', 'Notice checked: correct form, notice period and grounds'],
+  ['date', 'Move-out date confirmed with tenant'],
+  ['cobook', 'Check-out inspection booked'],
+  ['checkout', 'Check-out inspection done and compared with check-in inventory'],
+  ['meters', 'Final meter readings taken (with photos)'],
+  ['utilities', 'Suppliers, water company & council tax told the end date'],
+  ['keys', 'All keys returned'],
+  ['forwarding', 'Forwarding address obtained'],
+  ['deductions', 'Deposit deductions proposed & agreed (or dispute raised with scheme)'],
+  ['depreturn', 'Deposit returned (within 10 days of agreement)', 'Ticks itself when you enter the return date', t => !!t.depositReturnedDate],
+  ['finalrent', 'Final rent account settled'],
+  ['relet', 'Property prepared for re-letting / void works booked'],
+];
+
+/* ================= Schemas ================= */
+const F = (k, l, t = 'text', x = {}) => ({k, l, t, ...x});
+const SEC = l => ({t:'section', l});
+const ref = (k, l, to, x = {}) => F(k, l, 'ref', {to, ...x});
+
+const SCHEMAS = {
+  properties: {
+    label:'Properties', one:'Property', detail:'property',
+    title: r => r.name || r.address1 || 'Property',
+    fields: [
+      F('name', 'Nickname', 'text', {req:true, ph:'e.g. Elm Street flat'}),
+      F('address1', 'Address line 1', 'text', {req:true}), F('address2', 'Address line 2'),
+      F('town', 'Town / city'), F('postcode', 'Postcode'),
+      F('nation', 'Nation (rules differ)', 'select', {opts:NATIONS, def:'England'}),
+      F('type', 'Property type', 'select', {opts:['House','Flat','Maisonette','Bungalow','Studio','HMO','Room','Other']}),
+      F('bedrooms', 'Bedrooms', 'number'),
+      F('furnished', 'Furnishing', 'select', {opts:['Unfurnished','Part furnished','Furnished']}),
+      F('availability', 'Status when not let', 'select', {opts:['Vacant','Void works','Not for let','Selling'], def:'Vacant'}),
+      F('hasGas', 'Has gas supply / gas appliances', 'checkbox', {def:true}),
+      F('isHMO', 'Is an HMO (needs HMO licence check)', 'checkbox'),
+      SEC('Council & finance'),
+      F('council', 'Local council'), F('councilTaxBand', 'Council tax band', 'select', {opts:['A','B','C','D','E','F','G','H','I']}),
+      F('purchaseDate', 'Purchase date', 'date'), F('purchasePrice', 'Purchase price', 'money'),
+      F('lender', 'Mortgage lender'), F('mortgageRef', 'Mortgage account no.'),
+      F('fixEnd', 'Mortgage fixed rate ends', 'date', {hint:'Reminder 90 days before'}),
+      F('targetRent', 'Target rent (per month)', 'money'),
+      SEC('Other'),
+      F('keys', 'Keys held (sets, who has them)', 'textarea'),
+      F('notes', 'Notes', 'textarea'),
+    ],
+    cols: ['name', {l:'Address', v:r => esc(addr(r))}, {l:'Occupancy', v:r => occBadge(r)}, {l:'Compliance', v:r => complianceBadge(r)}],
+    sort: (a, b) => (a.name || '').localeCompare(b.name || ''),
+  },
+  tenants: {
+    label:'Tenants', one:'Tenant',
+    title: r => [r.firstName, r.lastName].filter(Boolean).join(' ') || 'Tenant',
+    fields: [
+      F('firstName', 'First name', 'text', {req:true}), F('lastName', 'Last name', 'text', {req:true}),
+      F('email', 'Email', 'email'), F('phone', 'Phone', 'tel'), F('dob', 'Date of birth', 'date'),
+      F('employer', 'Employer / income source'), F('income', 'Annual income', 'money'),
+      F('prevAddress', 'Previous address', 'textarea'),
+      F('emergencyName', 'Emergency contact name'), F('emergencyPhone', 'Emergency contact phone', 'tel'),
+      SEC('Checks'),
+      F('referencing', 'Referencing result', 'select', {opts:['Not started','In progress','Passed','Passed with guarantor','Failed']}),
+      F('rtrDate', 'Right to Rent check date', 'date'),
+      F('rtrMethod', 'Right to Rent method', 'select', {opts:['Manual document check','Home Office online share code','Certified digital ID (IDVT)','Not required (Wales/Scotland/NI)']}),
+      F('rtrExpiry', 'Right to Rent permission expires', 'date', {hint:'Only for time-limited permission – a follow-up check is needed before this date'}),
+      F('guarantorName', 'Guarantor name'), F('guarantorPhone', 'Guarantor phone', 'tel'), F('guarantorEmail', 'Guarantor email', 'email'),
+      F('guarantorAddress', 'Guarantor address', 'textarea'),
+      SEC('After tenancy'),
+      F('forwardingAddress', 'Forwarding address', 'textarea'),
+      F('notes', 'Notes', 'textarea'),
+    ],
+    cols: [{l:'Name', v:r => esc(SCHEMAS.tenants.title(r))}, 'phone', 'email', {l:'Referencing', v:r => r.referencing ? badge(r.referencing, /Passed/.test(r.referencing) ? 'ok' : r.referencing === 'Failed' ? 'bad' : 'info') : ''}, {l:'Right to Rent', v:r => rtrBadge(r)}],
+    sort: (a, b) => (a.lastName || '').localeCompare(b.lastName || ''),
+  },
+  tenancies: {
+    label:'Tenancies', one:'Tenancy', detail:'tenancy',
+    title: r => `${propName(r.property)} – ${tenantNames(r) || 'no tenants'}`,
+    intro:'Add the tenants first (Tenants page), then create the tenancy and tick them here.',
+    fields: [
+      ref('property', 'Property', 'properties', {req:true}),
+      F('tenants', 'Tenants on the agreement', 'refs', {to:'tenants'}),
+      F('status', 'Status', 'select', {opts:['Pipeline','Active','Notice given','Ended'], def:'Pipeline', req:true, hint:'Pipeline = agreed but not moved in yet'}),
+      F('type', 'Tenancy type', 'select', {opts:['Assured periodic tenancy (England)','Assured shorthold (pre-May 2026, England)','Occupation contract (Wales)','Private residential tenancy (Scotland)','Private tenancy (Northern Ireland)','Company let','Lodger / licence','Other']}),
+      F('startDate', 'Start / move-in date', 'date', {req:true}), F('endDate', 'Actual end date', 'date', {hint:'Fill in once the tenancy has ended'}),
+      SEC('Rent'),
+      F('rent', 'Rent amount', 'money', {req:true}),
+      F('frequency', 'Rent frequency', 'select', {opts:Object.keys(FREQ), def:'Monthly', req:true, hint:'Rent is assumed due in advance on the same date as the start date each period'}),
+      F('paymentMethod', 'How rent is paid', 'select', {opts:['Standing order','Bank transfer','Universal Credit (direct)','Cash','Other']}),
+      F('rentReviewDate', 'Next rent review date', 'date', {hint:'England: rent can be increased at most once a year (Section 13 notice)'}),
+      SEC('Deposits'),
+      F('holdingDeposit', 'Holding deposit', 'money'),
+      F('deposit', 'Tenancy deposit', 'money'), F('depositReceived', 'Deposit received on', 'date'),
+      F('depositScheme', 'Deposit scheme', 'select', {opts:['DPS – custodial','DPS – insured','TDS – custodial','TDS – insured','mydeposits','SafeDeposits Scotland','Letting Protection Service Scotland','mydeposits Scotland','TDS Northern Ireland','Other']}),
+      F('depositRef', 'Deposit protection reference'),
+      F('depositProtectedDate', 'Deposit protected on', 'date'), F('prescribedInfoDate', 'Prescribed information served on', 'date'),
+      SEC('Notice & termination'),
+      F('noticeBy', 'Notice given by', 'select', {opts:['Tenant','Landlord','Mutual agreement']}),
+      F('noticeType', 'Notice type', 'select', {opts:['Tenant notice to quit','Section 8 (possession grounds)','Section 13 rent increase','Section 21 (legacy, pre-May 2026)','Mutual surrender','Wales – occupation contract notice','Scotland – notice to leave','Other']}),
+      F('noticeServedDate', 'Notice served / received on', 'date'), F('noticeExpiry', 'Notice expires / leaving date', 'date'),
+      F('noticeGrounds', 'Grounds / reason', 'textarea'),
+      F('depositDeductions', 'Deposit deductions', 'money'), F('depositReturned', 'Deposit returned to tenant', 'money'),
+      F('depositReturnedDate', 'Deposit returned on', 'date'),
+      F('notes', 'Notes', 'textarea'),
+    ],
+    cols: [{l:'Property', v:r => esc(propName(r.property))}, {l:'Tenants', v:r => esc(tenantNames(r))}, {l:'Status', v:r => statusBadge(r.status)}, {l:'Rent', v:r => r.rent ? money(r.rent) + ' ' + (r.frequency || '').toLowerCase() : ''}, 'startDate', {l:'Balance', v:r => balanceBadge(r)}],
+    sort: (a, b) => ['Active','Notice given','Pipeline','Ended'].indexOf(a.status) - ['Active','Notice given','Pipeline','Ended'].indexOf(b.status) || (b.startDate || '').localeCompare(a.startDate || ''),
+  },
+  viewings: {
+    label:'Viewings & enquiries', one:'Viewing',
+    title: r => `${r.name || 'Viewing'} – ${propName(r.property)}`,
+    fields: [
+      ref('property', 'Property', 'properties', {req:true}),
+      F('when', 'Date & time', 'datetime-local'),
+      F('name', 'Applicant name', 'text', {req:true}), F('phone', 'Phone', 'tel'), F('email', 'Email', 'email'),
+      F('source', 'Where they found it', 'select', {opts:['Rightmove','Zoopla','OpenRent','SpareRoom','OnTheMarket','Facebook','Word of mouth','Letting agent','Other']}),
+      F('status', 'Viewing status', 'select', {opts:['Enquiry','Booked','Attended','No-show','Cancelled'], def:'Booked'}),
+      F('outcome', 'Outcome', 'select', {opts:['Interested','Applied','Not interested','Offered','Declined by me']}),
+      F('household', 'Household (adults, children, pets)'), F('moveDate', 'Wants to move', 'date'),
+      F('notes', 'Notes', 'textarea'),
+    ],
+    cols: [{l:'When', v:r => esc(fmtDT(r.when))}, {l:'Property', v:r => esc(propName(r.property))}, 'name', 'phone', {l:'Status', v:r => r.status ? badge(r.status, r.status === 'Booked' ? 'info' : r.status === 'Attended' ? 'ok' : 'muted') : ''}, 'outcome'],
+    sort: (a, b) => (b.when || '').localeCompare(a.when || ''),
+    formActions: [{l:'Create tenant from this applicant', show:r => r.id, run:async r => {
+      const [firstName, ...rest] = (r.name || '').split(' ');
+      const t = await upsert('tenants', {firstName, lastName:rest.join(' '), phone:r.phone, email:r.email, notes:`Viewed ${propName(r.property)} ${fmtDT(r.when)}`});
+      r.outcome = 'Applied'; await upsert('viewings', r);
+      closeModal(); toast('Tenant created'); openForm('tenants', t);
+    }}],
+  },
+  certificates: {
+    label:'Certificates & compliance', one:'Certificate',
+    title: r => `${certType(r.certType).l} – ${propName(r.property)}`,
+    fields: [
+      ref('property', 'Property', 'properties', {req:true}),
+      F('certType', 'Type', 'select', {opts:CERT_TYPES.map(c => ({v:c.v, l:c.l})), req:true}),
+      F('issueDate', 'Issue / inspection date', 'date', {req:true}),
+      F('expiryDate', 'Expiry / next due date', 'date', {hint:'Filled in automatically from the type – change it if different'}),
+      F('reference', 'Certificate / policy number'),
+      F('provider', 'Engineer / company'), F('regNumber', 'Registration no. (Gas Safe, NICEIC…)'),
+      F('result', 'Result / rating', 'text', {ph:'e.g. C (EPC), Satisfactory (EICR), Pass'}),
+      F('cost', 'Cost', 'money'),
+      F('givenToTenant', 'Copy given to tenant on', 'date'),
+      F('notes', 'Notes / remedial work', 'textarea'),
+    ],
+    cols: [{l:'Property', v:r => esc(propName(r.property))}, {l:'Type', v:r => esc(certType(r.certType).l)}, 'issueDate', 'expiryDate', 'result', {l:'Status', v:r => certBadge(r)}],
+    sort: (a, b) => (a.expiryDate || '9').localeCompare(b.expiryDate || '9'),
+    onChange(form, name) {
+      if (name !== 'certType' && name !== 'issueDate') return;
+      const ct = certType(form.elements.certType.value), iss = form.elements.issueDate.value;
+      if (ct.months && iss) form.elements.expiryDate.value = addMonths(iss, ct.months);
+    },
+  },
+  inspections: {
+    label:'Inspections & checks', one:'Inspection',
+    title: r => `${r.type || 'Inspection'} – ${propName(r.property)}`,
+    fields: [
+      ref('property', 'Property', 'properties', {req:true}),
+      F('date', 'Date', 'date', {req:true, def:todayStr}),
+      F('type', 'Type', 'select', {opts:['Check-in (inventory)','Routine inspection','Mid-term inspection','Check-out','Alarm test','Pre-let safety check','Other'], req:true}),
+      F('inspector', 'Done by'),
+      F('condition', 'Overall condition', 'select', {opts:['Good','Fair','Poor']}),
+      F('alarmsOk', 'Smoke & CO alarms tested and working', 'checkbox'),
+      F('damp', 'Damp or mould found', 'checkbox'),
+      F('findings', 'Findings', 'textarea'), F('actions', 'Actions needed', 'textarea'),
+      F('nextDue', 'Next inspection due', 'date', {hint:'Typical: every 3–6 months, with 24 hours\' written notice to the tenant'}),
+    ],
+    cols: ['date', {l:'Property', v:r => esc(propName(r.property))}, 'type', {l:'Condition', v:r => r.condition ? badge(r.condition, {Good:'ok', Fair:'warn', Poor:'bad'}[r.condition]) : ''}, {l:'Damp', v:r => r.damp ? badge('Damp/mould', 'bad') : ''}, 'nextDue'],
+    sort: (a, b) => (b.date || '').localeCompare(a.date || ''),
+  },
+  maintenance: {
+    label:'Repairs & maintenance', one:'Repair',
+    title: r => r.title || 'Repair',
+    fields: [
+      ref('property', 'Property', 'properties', {req:true}),
+      F('title', 'What\'s the problem?', 'text', {req:true, wide:true}),
+      F('reported', 'Reported on', 'date', {def:todayStr}), F('reportedBy', 'Reported by'),
+      F('priority', 'Priority', 'select', {opts:['Emergency (24 hours)','Urgent (within 7 days)','Routine'], def:'Routine'}),
+      F('status', 'Status', 'select', {opts:['Open','Contractor booked','In progress','Awaiting parts','Completed','Cancelled'], def:'Open'}),
+      ref('contractor', 'Contractor', 'contacts'), F('booked', 'Booked for', 'date'),
+      F('quote', 'Quote', 'money'), F('cost', 'Final cost', 'money', {hint:'Tip: also add this as an expense on the Money page'}),
+      F('completed', 'Completed on', 'date'),
+      F('notes', 'Notes', 'textarea'),
+    ],
+    cols: [{l:'Reported', v:r => esc(fmtDate(r.reported))}, {l:'Property', v:r => esc(propName(r.property))}, 'title', {l:'Priority', v:r => r.priority ? badge(r.priority.split(' ')[0], /Emerg/.test(r.priority) ? 'bad' : /Urg/.test(r.priority) ? 'warn' : 'muted') : ''}, {l:'Status', v:r => badge(r.status || 'Open', isOpenRepair(r) ? 'info' : 'ok')}, {l:'Cost', v:r => r.cost ? money(r.cost) : ''}],
+    sort: (a, b) => (isOpenRepair(b) - isOpenRepair(a)) || (b.reported || '').localeCompare(a.reported || ''),
+  },
+  utilities: {
+    label:'Utilities & accounts', one:'Utility',
+    title: r => `${r.utility || 'Utility'} – ${propName(r.property)}`,
+    fields: [
+      ref('property', 'Property', 'properties', {req:true}),
+      F('utility', 'Utility', 'select', {opts:['Electricity','Gas','Water','Council tax','Broadband','TV licence','Oil','Service charge / ground rent','Other'], req:true}),
+      F('supplier', 'Supplier / council'), F('accountNo', 'Account number'),
+      F('responsible', 'Who pays', 'select', {opts:['Tenant','Landlord','Included in rent'], def:'Tenant'}),
+      F('meterId', 'Meter serial / MPAN / MPRN'), F('meterLocation', 'Meter / stopcock / fuse box location'),
+      F('phone', 'Supplier phone', 'tel'), F('notes', 'Notes', 'textarea'),
+    ],
+    cols: [{l:'Property', v:r => esc(propName(r.property))}, 'utility', 'supplier', 'accountNo', 'responsible', 'meterId'],
+    sort: (a, b) => propName(a.property).localeCompare(propName(b.property)),
+  },
+  meterReadings: {
+    label:'Meter readings', one:'Meter reading',
+    title: r => `${r.utility} reading ${fmtDate(r.date)}`,
+    fields: [
+      ref('property', 'Property', 'properties', {req:true}),
+      F('utility', 'Meter', 'select', {opts:['Electricity','Electricity (night/E7)','Gas','Water','Oil level','Other'], req:true}),
+      F('date', 'Date', 'date', {req:true, def:todayStr}), F('reading', 'Reading', 'text', {req:true}),
+      F('context', 'Reason', 'select', {opts:['Check-in','Check-out','Routine','Change of supplier','Void period']}),
+      F('notes', 'Notes', 'textarea', {hint:'Attach a photo of the meter below'}),
+    ],
+    cols: ['date', {l:'Property', v:r => esc(propName(r.property))}, 'utility', 'reading', 'context'],
+    sort: (a, b) => (b.date || '').localeCompare(a.date || ''),
+  },
+  payments: {
+    label:'Rent received', one:'Rent payment',
+    title: r => `${money(r.amount)} on ${fmtDate(r.date)}`,
+    fields: [
+      ref('tenancy', 'Tenancy', 'tenancies', {req:true}),
+      F('date', 'Date received', 'date', {req:true, def:todayStr}), F('amount', 'Amount', 'money', {req:true}),
+      F('method', 'Method', 'select', {opts:['Standing order','Bank transfer','Universal Credit','Cash','Cheque','Other'], def:'Standing order'}),
+      F('period', 'Period covered', 'text', {ph:'e.g. Dec 2026'}), F('notes', 'Notes', 'textarea'),
+    ],
+    cols: ['date', {l:'Tenancy', v:r => esc(titleOf('tenancies', r.tenancy))}, {l:'Amount', v:r => money(r.amount)}, 'method', 'period'],
+    sort: (a, b) => (b.date || '').localeCompare(a.date || ''),
+  },
+  expenses: {
+    label:'Expenses', one:'Expense',
+    title: r => `${r.category || 'Expense'} ${money(r.amount)}`,
+    fields: [
+      ref('property', 'Property', 'properties', {hint:'Leave blank for costs shared across the portfolio'}),
+      F('date', 'Date', 'date', {req:true, def:todayStr}), F('amount', 'Amount', 'money', {req:true}),
+      F('category', 'Category', 'select', {opts:['Repairs & maintenance','Certificates & safety checks','Insurance','Letting / agent fees','Mortgage interest','Utilities & council tax (void)','Ground rent / service charge','Legal & professional','Replacement furnishings & appliances','Travel','Office & phone','Other'], req:true}),
+      F('supplier', 'Paid to'), F('notes', 'Notes', 'textarea', {hint:'Attach the receipt or invoice below'}),
+    ],
+    cols: ['date', {l:'Property', v:r => esc(r.property ? propName(r.property) : 'Portfolio')}, 'category', {l:'Amount', v:r => money(r.amount)}, 'supplier'],
+    sort: (a, b) => (b.date || '').localeCompare(a.date || ''),
+  },
+  tasks: {
+    label:'Tasks & reminders', one:'Task',
+    title: r => r.title || 'Task',
+    fields: [
+      F('title', 'Task', 'text', {req:true, wide:true}),
+      ref('property', 'Property (optional)', 'properties'),
+      F('due', 'Due date', 'date'), F('done', 'Done', 'checkbox'),
+      F('notes', 'Notes', 'textarea'),
+    ],
+    cols: [{l:'Due', v:r => r.done ? badge('Done', 'ok') : r.due ? (daysTo(r.due) < 0 ? badge(fmtDate(r.due), 'bad') : esc(fmtDate(r.due))) : ''}, 'title', {l:'Property', v:r => esc(r.property ? propName(r.property) : '')}],
+    sort: (a, b) => (a.done - b.done) || (a.due || '9').localeCompare(b.due || '9'),
+  },
+  contacts: {
+    label:'Contacts & contractors', one:'Contact',
+    title: r => r.name + (r.company ? ` (${r.company})` : ''),
+    fields: [
+      F('name', 'Name', 'text', {req:true}), F('company', 'Company'),
+      F('role', 'Role', 'select', {opts:['Gas engineer','Electrician','Plumber','Builder / handyman','Locksmith','Cleaner','Gardener','Inventory clerk','Letting agent','Solicitor','Accountant','Insurer','Mortgage broker','Council','Other']}),
+      F('phone', 'Phone', 'tel'), F('email', 'Email', 'email'),
+      F('regNumber', 'Registration no. (Gas Safe, NICEIC, etc.)'), F('notes', 'Notes', 'textarea'),
+    ],
+    cols: ['name', 'company', 'role', 'phone', 'email'],
+    sort: (a, b) => (a.name || '').localeCompare(b.name || ''),
+  },
+};
+const ENTITIES = Object.keys(SCHEMAS);
+
+/* ================= Storage (IndexedDB, all on this device) ================= */
+const DB = {
+  db:null, data:{},
+  open() { return new Promise((res, rej) => { const r = indexedDB.open('landlord-desk', 1);
+    r.onupgradeneeded = () => { r.result.createObjectStore('kv'); r.result.createObjectStore('files'); };
+    r.onsuccess = () => { this.db = r.result; res(); }; r.onerror = () => rej(r.error); }); },
+  req(store, mode, fn) { return new Promise((res, rej) => { const t = this.db.transaction(store, mode); const q = fn(t.objectStore(store));
+    t.oncomplete = () => res(q && q.result); t.onerror = () => rej(t.error); t.onabort = () => rej(t.error); }); },
+  get(store, k) { return this.req(store, 'readonly', s => s.get(k)); },
+  put(store, k, v) { return this.req(store, 'readwrite', s => s.put(v, k)); },
+  del(store, k) { return this.req(store, 'readwrite', s => s.delete(k)); },
+  clear(store) { return this.req(store, 'readwrite', s => s.clear()); },
+  key:null, // AES key derived from the login password (only ever held in memory)
+  async kget(k) { const v = await this.get('kv', k); return v && v.__enc ? JSON.parse(new TextDecoder().decode(await Crypt.dec(this.key, v))) : v; },
+  async kput(k, val) { return this.put('kv', k, this.key ? {__enc:1, ...(await Crypt.enc(this.key, new TextEncoder().encode(JSON.stringify(val))))} : val); },
+  async fget(id) { const v = await this.get('files', id); return v && v.__enc ? new Blob([await Crypt.dec(this.key, v)], {type:v.type}) : v; },
+  async fput(id, blob) { return this.put('files', id, this.key ? {__enc:1, type:blob.type, ...(await Crypt.enc(this.key, await blob.arrayBuffer()))} : blob); },
+  async load() { for (const e of ENTITIES) this.data[e] = (await this.kget(e)) || [];
+    this.data.filesIndex = (await this.kget('filesIndex')) || [];
+    this.data.settings = (await this.kget('settings')) || {warnDays:60}; },
+  save(k) { return this.kput(k, this.data[k]); },
+  // Re-write every record and file under a new key (null = unencrypted)
+  async rekey(newKey) {
+    const blobs = []; for (const m of this.data.filesIndex) blobs.push([m.id, await this.fget(m.id)]);
+    this.key = newKey;
+    for (const k of [...ENTITIES, 'filesIndex', 'settings']) await this.save(k);
+    for (const [id, b] of blobs) if (b) await this.fput(id, b);
+  },
+};
+
+/* ================= Login & encryption (Web Crypto – built into every modern browser) ================= */
+const Crypt = {
+  ok: () => !!(window.crypto && crypto.subtle),
+  async derive(pw, salt, iter) {
+    const base = await crypto.subtle.importKey('raw', new TextEncoder().encode(pw), 'PBKDF2', false, ['deriveKey']);
+    return crypto.subtle.deriveKey({name:'PBKDF2', salt, iterations:iter, hash:'SHA-256'}, base, {name:'AES-GCM', length:256}, false, ['encrypt', 'decrypt']);
+  },
+  async enc(key, buf) { const iv = crypto.getRandomValues(new Uint8Array(12)); return {iv, ct: await crypto.subtle.encrypt({name:'AES-GCM', iv}, key, buf)}; },
+  dec(key, o) { if (!key) throw new Error('locked'); return crypto.subtle.decrypt({name:'AES-GCM', iv:o.iv}, key, o.ct); },
+};
+const CHECK = 'narly-ok';
+const ITER = 310000;
+async function makeAuth(user, pw, extra = {}) {
+  const salt = crypto.getRandomValues(new Uint8Array(16)), key = await Crypt.derive(pw, salt, ITER);
+  return {key, auth:{enabled:true, user, salt, iter:ITER, check: await Crypt.enc(key, new TextEncoder().encode(CHECK)), autoLock:15, ...extra}};
+}
+async function tryPassword(auth, pw) {
+  const key = await Crypt.derive(pw, auth.salt, auth.iter);
+  try { return new TextDecoder().decode(await Crypt.dec(key, auth.check)) === CHECK ? key : null; } catch { return null; }
+}
+const u8ToB64 = u => { let s = ''; u = new Uint8Array(u); for (let i = 0; i < u.length; i += 0x8000) s += String.fromCharCode(...u.subarray(i, i + 0x8000)); return btoa(s); };
+const b64ToU8 = b => Uint8Array.from(atob(b), c => c.charCodeAt(0));
+function askPassword(title, text = '') {
+  return new Promise(res => {
+    showModal(`<form id="pwAsk"><div class="mhead"><h2>${esc(title)}</h2><button type="button" class="x" id="pwCancelX">×</button></div>${text ? `<p class="muted">${esc(text)}</p>` : ''}
+      <label class="field"><span>Password</span><input type="password" name="pw" required autocomplete="current-password"></label>
+      <div class="mfoot"><span class="sp"></span><button type="button" id="pwCancel">Cancel</button><button class="primary" type="submit">OK</button></div></form>`);
+    const done = v => { closeModal(); res(v); };
+    $('#pwCancel').onclick = $('#pwCancelX').onclick = () => done(null);
+    $('#pwAsk').onsubmit = e => { e.preventDefault(); done(e.target.pw.value); };
+  });
+}
+function showLogin(auth) {
+  document.body.classList.add('locked');
+  $('#login').innerHTML = `<button type="button" class="login-theme" data-act="theme" aria-label="Change theme"></button><form class="login-card" id="loginForm" autocomplete="on">
+    <img src="icon.svg" alt="" width="64" height="64"><h2>Narly Properties</h2>
+    <p class="muted">Sign in to open your records on this device.</p>
+    <label class="field"><span>Username</span><input name="user" autocomplete="username" value="${esc(auth.user || '')}"${auth.user ? ' readonly' : ''}></label>
+    <label class="field"><span>Password</span><input type="password" name="pw" required autocomplete="current-password" autofocus></label>
+    <p class="err" id="loginErr"></p>
+    <button class="primary" type="submit" style="width:100%">Sign in</button>
+    <p class="small"><a href="#" id="forgot">Forgot password?</a></p>
+    <div id="forgotBox" class="hidden notice warn small">Your data is encrypted with your password, so it <b>cannot be recovered</b> without it. If you have a backup, you can erase this device and then restore the backup (you'll need the password that was in use when you made it).<br><br><button type="button" class="danger" id="eraseAll">Erase everything on this device</button></div>
+  </form>`;
+  let fails = 0;
+  $('#loginForm').onsubmit = async e => {
+    e.preventDefault(); const btn = e.target.querySelector('button[type=submit]'); btn.disabled = true; $('#loginErr').textContent = 'Checking…';
+    const key = await tryPassword(auth, e.target.pw.value);
+    if (!key) { fails++; await new Promise(r => setTimeout(r, Math.min(fails, 5) * 600)); $('#loginErr').textContent = 'Wrong password – try again.'; btn.disabled = false; e.target.pw.select(); return; }
+    DB.key = key; await DB.load();
+    document.body.classList.remove('locked'); $('#login').innerHTML = '';
+    startApp();
+  };
+  applyTheme(getTheme());
+  $('#forgot').onclick = e => { e.preventDefault(); $('#forgotBox').classList.toggle('hidden'); };
+  $('#eraseAll').onclick = async () => {
+    if (prompt('This permanently deletes ALL data and the login on this device. Type ERASE to confirm.') !== 'ERASE') return;
+    await DB.clear('kv'); await DB.clear('files'); location.hash = '#/settings'; location.reload();
+  };
+}
+function lockNow() { location.hash = '#/dashboard'; location.reload(); } // reloading drops the key from memory
+let lastActive = Date.now();
+function startAutoLock() {
+  ['click', 'keydown', 'touchstart', 'scroll'].forEach(ev => addEventListener(ev, () => { lastActive = Date.now(); }, {passive:true}));
+  setInterval(async () => {
+    const a = await DB.get('kv', 'auth');
+    if (a && a.enabled && a.autoLock && Date.now() - lastActive > a.autoLock * 60000) lockNow();
+  }, 30000);
+}
+async function loginSettingsHTML() {
+  const a = await DB.get('kv', 'auth');
+  if (!Crypt.ok()) return '<p class="muted">Login needs a browser with Web Crypto (any up-to-date Chrome, Edge, Firefox or Safari).</p>';
+  if (!a || !a.enabled) return `<p>Protect the app with a username and password. Your records and documents are then <b>encrypted on this device</b> – nobody can read them without the password, even with access to the computer.</p>
+    <form id="authOn" class="grid">
+      <label class="field"><span>Username</span><input name="user" required autocomplete="username"></label><span></span>
+      <label class="field"><span>Password (min 8 characters)</span><input type="password" name="pw" minlength="8" required autocomplete="new-password"></label>
+      <label class="field"><span>Repeat password</span><input type="password" name="pw2" minlength="8" required autocomplete="new-password"></label>
+      <label class="field chk wide"><input type="checkbox" name="ack" required><span>I understand that if I forget the password, my data cannot be recovered without a backup.</span></label>
+      <div><button class="primary" type="submit">${ico('lock')}Turn on login</button></div></form>`;
+  return `<p>${badge('Login on', 'ok')} Signed in as <b>${esc(a.user || '')}</b>. Data on this device is encrypted.</p>
+    <form id="authLock" class="grid"><label class="field"><span>Lock automatically after</span><select name="autoLock">${[[5, '5 minutes'], [15, '15 minutes'], [30, '30 minutes'], [60, '1 hour'], [0, 'Never']].map(([v, l]) => `<option value="${v}"${+a.autoLock === v ? ' selected' : ''}>${l} of no activity</option>`).join('')}</select></label><div style="align-self:end"><button type="submit">Save</button></div></form>
+    <h4>Change password</h4>
+    <form id="authChange" class="grid">
+      <label class="field"><span>Current password</span><input type="password" name="cur" required autocomplete="current-password"></label><span></span>
+      <label class="field"><span>New password (min 8)</span><input type="password" name="pw" minlength="8" required autocomplete="new-password"></label>
+      <label class="field"><span>Repeat new password</span><input type="password" name="pw2" minlength="8" required autocomplete="new-password"></label>
+      <div><button type="submit">Change password</button></div></form>
+    <h4>Turn off login</h4><p class="small muted">Removes the password and stores data unencrypted on this device again.</p>
+    <form id="authOff" class="grid"><label class="field"><span>Current password</span><input type="password" name="cur" required autocomplete="current-password"></label><div style="align-self:end"><button type="submit" class="danger">Turn off login</button></div></form>`;
+}
+async function handleAuthForm(f) {
+  const a = await DB.get('kv', 'auth');
+  if (f.id === 'authOn') {
+    if (f.pw.value !== f.pw2.value) return alert('The passwords do not match.');
+    toast('Encrypting your data…');
+    const {key, auth} = await makeAuth(f.user.value.trim(), f.pw.value);
+    await DB.put('kv', 'auth', auth); await DB.rekey(key);
+    alert('Login is on. You will need this username and password next time you open the app.'); route();
+  } else if (f.id === 'authLock') {
+    a.autoLock = +f.autoLock.value; await DB.put('kv', 'auth', a); toast('Saved');
+  } else if (f.id === 'authChange') {
+    if (f.pw.value !== f.pw2.value) return alert('The new passwords do not match.');
+    if (!(await tryPassword(a, f.cur.value))) return alert('Current password is wrong.');
+    toast('Re-encrypting your data…');
+    const {key, auth} = await makeAuth(a.user, f.pw.value, {autoLock:a.autoLock});
+    await DB.rekey(key); await DB.put('kv', 'auth', auth);
+    alert('Password changed. Backups made before today still need the old password to restore.'); route();
+  } else if (f.id === 'authOff') {
+    if (!(await tryPassword(a, f.cur.value))) return alert('Current password is wrong.');
+    if (!confirm('Turn off login? Anyone using this device will be able to open your records.')) return;
+    await DB.rekey(null); await DB.del('kv', 'auth'); toast('Login turned off'); route();
+  }
+}
+const all = e => DB.data[e] || [];
+const byId = (e, id) => all(e).find(r => r.id === id);
+const titleOf = (e, id) => { const r = byId(e, id); return r ? SCHEMAS[e].title(r) : ''; };
+async function upsert(e, rec) {
+  rec.updated = new Date().toISOString();
+  if (!rec.id) { rec.id = uid(); rec.created = rec.updated; }
+  const i = DB.data[e].findIndex(r => r.id === rec.id);
+  if (i < 0) DB.data[e].push(rec); else DB.data[e][i] = rec;
+  await DB.save(e); return rec;
+}
+function referencesTo(e, id) {
+  const out = [];
+  for (const en of ENTITIES) for (const f of SCHEMAS[en].fields) {
+    if ((f.t === 'ref' || f.t === 'refs') && f.to === e) {
+      const n = all(en).filter(r => f.t === 'ref' ? r[f.k] === id : (r[f.k] || []).includes(id)).length;
+      if (n) out.push(`${n} × ${SCHEMAS[en].label.toLowerCase()}`);
+    }
+  }
+  return out;
+}
+async function removeRec(e, id) {
+  DB.data[e] = all(e).filter(r => r.id !== id); await DB.save(e);
+  for (const f of filesFor(e + ':' + id)) await deleteFile(f.id);
+}
+/* files */
+const filesFor = owner => DB.data.filesIndex.filter(f => f.owner === owner);
+async function addFile(owner, file) {
+  const id = uid();
+  await DB.fput(id, new Blob([file], {type:file.type}));
+  DB.data.filesIndex.push({id, owner, name:file.name, type:file.type, size:file.size, added:todayStr()});
+  await DB.save('filesIndex');
+}
+async function deleteFile(id) { await DB.del('files', id); DB.data.filesIndex = DB.data.filesIndex.filter(f => f.id !== id); await DB.save('filesIndex'); }
+async function openFile(id) {
+  const meta = DB.data.filesIndex.find(f => f.id === id), blob = await DB.fget(id);
+  if (!blob) return alert('File not found');
+  if (/^(image\/|application\/pdf|text\/)/.test(meta.type)) { const u = URL.createObjectURL(blob); window.open(u, '_blank'); setTimeout(() => URL.revokeObjectURL(u), 120000); }
+  else download(meta.name, blob);
+}
+function ownerTitle(owner) { if (owner === 'general') return 'General documents'; const [e, id] = owner.split(':'); return SCHEMAS[e] ? `${SCHEMAS[e].one}: ${titleOf(e, id) || '(deleted)'}` : owner; }
+function ownerLink(owner) { const [e, id] = owner.split(':'); if (!SCHEMAS[e]) return '#/documents'; return SCHEMAS[e].detail ? `#/${SCHEMAS[e].detail}/${id}` : ''; }
+
+/* ================= Domain logic ================= */
+const addr = p => [p.address1, p.address2, p.town, p.postcode].filter(Boolean).join(', ');
+const propName = id => { const p = byId('properties', id); return p ? p.name : ''; };
+const tenantNames = t => (t.tenants || []).map(id => titleOf('tenants', id)).filter(Boolean).join(', ');
+const isLive = t => t.status === 'Active' || t.status === 'Notice given';
+const liveTenancy = pid => all('tenancies').find(t => t.property === pid && isLive(t));
+const isOpenRepair = r => !['Completed','Cancelled'].includes(r.status);
+function occupancy(p) {
+  const t = liveTenancy(p.id);
+  if (t) return t.status === 'Notice given' ? ['Let – notice given', 'warn'] : ['Let', 'ok'];
+  if (all('tenancies').some(t => t.property === p.id && t.status === 'Pipeline')) return ['Let agreed', 'info'];
+  return [p.availability || 'Vacant', 'muted'];
+}
+const occBadge = p => { const [t, k] = occupancy(p); return badge(t, k); };
+const statusBadge = s => badge(s || '—', {Active:'ok', 'Notice given':'warn', Pipeline:'info', Ended:'muted'}[s] || 'muted');
+function latestCert(pid, type) {
+  return all('certificates').filter(c => c.property === pid && c.certType === type)
+    .sort((a, b) => (b.expiryDate || b.issueDate || '').localeCompare(a.expiryDate || a.issueDate || ''))[0];
+}
+function certState(c) {
+  const warn = +DB.data.settings.warnDays || 60;
+  if (!c) return ['missing', 'Missing', 'bad'];
+  if (c.certType === 'epc' && /^\s*[FG]\b/i.test(c.result || '')) return ['lowepc', `Rating ${c.result.trim()[0].toUpperCase()} – below E`, 'bad'];
+  if (!c.expiryDate) return ['ok', 'Recorded', 'ok'];
+  const d = daysTo(c.expiryDate);
+  if (d < 0) return ['expired', 'Expired', 'bad'];
+  if (d <= 30) return ['due', `Due in ${d}d`, 'bad'];
+  if (d <= warn) return ['soon', `Due in ${d}d`, 'warn'];
+  return ['ok', 'Valid', 'ok'];
+}
+function certBadge(c) {
+  const latest = latestCert(c.property, c.certType);
+  if (latest && latest.id !== c.id) return badge('Superseded', 'muted');
+  const [, l, k] = certState(c); return badge(l, k);
+}
+function complianceIssues(p) {
+  const out = [];
+  for (const ct of coreTypes(p)) { const c = latestCert(p.id, ct.v), [st, l, k] = certState(c);
+    if (st === 'missing' && !ct.req) { out.push({ct, l:'Missing', k:'warn'}); continue; }
+    if (k !== 'ok') out.push({ct, l, k, c}); }
+  return out;
+}
+function complianceBadge(p) {
+  const i = complianceIssues(p);
+  if (i.some(x => x.k === 'bad')) return badge(`${i.filter(x => x.k === 'bad').length} problem(s)`, 'bad');
+  if (i.length) return badge('Due soon', 'warn');
+  return badge('OK', 'ok');
+}
+function rtrBadge(t) {
+  if (t.rtrMethod && /Not required/.test(t.rtrMethod)) return badge('Not required', 'muted');
+  if (!t.rtrDate) return badge('Not checked', 'warn');
+  if (t.rtrExpiry) { const d = daysTo(t.rtrExpiry); if (d < 0) return badge('Expired', 'bad'); if (d <= 60) return badge(`Recheck in ${d}d`, 'warn'); }
+  return badge('Checked ' + fmtDate(t.rtrDate), 'ok');
+}
+function dueDates(t, upTo = todayStr()) {
+  const out = []; if (!t.startDate || !t.rent || t.status === 'Pipeline') return out;
+  const end = t.endDate && t.endDate < upTo ? t.endDate : upTo;
+  const f = FREQ[t.frequency] || FREQ.Monthly;
+  for (let i = 0; i < 2000; i++) {
+    const d = f.m ? addMonths(t.startDate, f.m * i) : addDays(t.startDate, f.d * i);
+    if (d > end || (i > 0 && t.endDate && d >= t.endDate)) break;
+    out.push(d);
+  }
+  return out;
+}
+function ledger(t) {
+  const due = dueDates(t), pays = all('payments').filter(p => p.tenancy === t.id);
+  const expected = due.length * (Number(t.rent) || 0), paid = sum(pays, p => p.amount);
+  const T = todayStr(), overdue = due.filter(d => d < T).length * (Number(t.rent) || 0);
+  // arrears = overdue (rent due before today) minus paid; rent due today isn't arrears yet
+  return {due, pays, expected, paid, balance: paid - expected, arrears: Math.max(0, overdue - paid)};
+}
+function balanceBadge(t) {
+  if (t.status === 'Pipeline') return '';
+  const L = ledger(t), b = L.balance;
+  if (L.arrears > 0.5) return badge('Arrears ' + money(L.arrears), 'bad');
+  if (b < -0.5) return badge('Due today ' + money(-b), 'warn');
+  if (b > 0.5) return badge('In credit ' + money(b), 'info');
+  return badge('Up to date', 'ok');
+}
+const weeklyRent = t => (Number(t.rent) || 0) * (PER_YEAR[t.frequency] || 12) / 52;
+
+function computeAlerts() {
+  const A = [], warn = +DB.data.settings.warnDays || 60;
+  const add = (k, text, link, date) => A.push({k, text, link, date: date || ''});
+  for (const p of all('properties')) {
+    const let_ = !!liveTenancy(p.id) || all('tenancies').some(t => t.property === p.id && t.status === 'Pipeline');
+    for (const ct of coreTypes(p)) {
+      const c = latestCert(p.id, ct.v), [st, l, k] = certState(c);
+      if (st === 'missing') { if (let_) add(ct.req ? 'bad' : 'warn', `${p.name}: no ${ct.l} recorded`, '#/property/' + p.id); continue; }
+      if (k !== 'ok') add(k, `${p.name}: ${ct.l} – ${l}${c.expiryDate ? ' (' + fmtDate(c.expiryDate) + ')' : ''}`, '#/property/' + p.id, c.expiryDate);
+    }
+    if (p.fixEnd && daysTo(p.fixEnd) <= 90 && daysTo(p.fixEnd) >= -30) add('warn', `${p.name}: mortgage fixed rate ends ${fmtDate(p.fixEnd)} – arrange remortgage`, '#/property/' + p.id, p.fixEnd);
+    const ins = all('inspections').filter(i => i.property === p.id && i.nextDue).sort((a, b) => b.date.localeCompare(a.date))[0];
+    if (ins && daysTo(ins.nextDue) <= 14 && liveTenancy(p.id)) add(daysTo(ins.nextDue) < 0 ? 'bad' : 'warn', `${p.name}: inspection due ${fmtDate(ins.nextDue)}`, '#/property/' + p.id, ins.nextDue);
+  }
+  for (const t of all('tenancies')) {
+    const link = '#/tenancy/' + t.id, nm = `${propName(t.property)} (${tenantNames(t) || 'tenancy'})`;
+    if (t.status === 'Ended') { if (t.deposit && !t.depositReturnedDate && t.endDate) add(daysTo(t.endDate) < -10 ? 'bad' : 'warn', `${nm}: deposit not yet returned`, link, t.endDate); continue; }
+    if (t.deposit && !t.depositProtectedDate) { const dl = addDays(t.depositReceived || t.startDate, 30); add(daysTo(dl) < 7 ? 'bad' : 'warn', `${nm}: protect deposit by ${fmtDate(dl)}`, link, dl); }
+    if (t.deposit && !t.prescribedInfoDate) { const dl = addDays(t.depositReceived || t.startDate, 30); add(daysTo(dl) < 7 ? 'bad' : 'warn', `${nm}: serve deposit prescribed information by ${fmtDate(dl)}`, link, dl); }
+    if (t.deposit && t.rent && t.deposit > weeklyRent(t) * 5 + 0.5 && weeklyRent(t) * 52 < 50000) add('warn', `${nm}: deposit is more than 5 weeks' rent (legal cap in England)`, link);
+    if (isLive(t)) { const a = ledger(t).arrears; if (a > 0.5) add('bad', `${nm}: rent arrears ${money(a)}`, link); }
+    if (t.noticeExpiry && t.status === 'Notice given') { const d = daysTo(t.noticeExpiry); add(d < 0 ? 'bad' : d <= 30 ? 'warn' : 'info', `${nm}: notice ends ${fmtDate(t.noticeExpiry)}${d < 0 ? ' – update tenancy status' : ''}`, link, t.noticeExpiry); }
+    if (t.rentReviewDate && isLive(t) && daysTo(t.rentReviewDate) <= 45) add('info', `${nm}: rent review ${fmtDate(t.rentReviewDate)}`, link, t.rentReviewDate);
+    if (t.status === 'Pipeline') { const pr = checklistProgress(t, 'onboarding', ONBOARD); add('info', `${nm}: move-in checklist ${pr.done}/${pr.total} done`, link, t.startDate); }
+    if (t.status === 'Notice given') { const pr = checklistProgress(t, 'offboarding', OFFBOARD); if (pr.done < pr.total) add('info', `${nm}: move-out checklist ${pr.done}/${pr.total} done`, link); }
+  }
+  const liveTenantIds = new Set(all('tenancies').filter(isLive).flatMap(t => t.tenants || []));
+  for (const tn of all('tenants')) {
+    const nm = SCHEMAS.tenants.title(tn);
+    if (tn.rtrExpiry && liveTenantIds.has(tn.id) && daysTo(tn.rtrExpiry) <= warn) add(daysTo(tn.rtrExpiry) < 0 ? 'bad' : 'warn', `${nm}: Right to Rent follow-up check due ${fmtDate(tn.rtrExpiry)}`, '', tn.rtrExpiry);
+  }
+  for (const r of all('maintenance').filter(isOpenRepair)) {
+    if (/Emerg/.test(r.priority)) add('bad', `Emergency repair open: ${r.title} (${propName(r.property)})`, '#/maintenance');
+    else if (/Urg/.test(r.priority)) add('warn', `Urgent repair open: ${r.title} (${propName(r.property)})`, '#/maintenance');
+    else if (r.reported && daysTo(r.reported) < -30) add('info', `Repair open over 30 days: ${r.title} (${propName(r.property)})`, '#/maintenance');
+  }
+  for (const i of all('inspections').filter(i => i.damp && daysTo(i.date) > -90)) add('warn', `Damp/mould reported at ${propName(i.property)} on ${fmtDate(i.date)} – investigate promptly`, '#/inspections');
+  for (const t of all('tasks').filter(t => !t.done && t.due && daysTo(t.due) <= 7)) add(daysTo(t.due) < 0 ? 'bad' : 'warn', `Task: ${t.title} – due ${fmtDate(t.due)}`, '#/tasks', t.due);
+  const anyData = ENTITIES.some(e => all(e).length);
+  const lb = DB.data.settings.lastBackup;
+  if (anyData && (!lb || daysTo(lb) < -30)) add('info', lb ? `Last backup was ${fmtDate(lb)} – make a new one` : 'You have never made a backup – do it now', '#/settings');
+  const order = {bad:0, warn:1, info:2};
+  return A.sort((a, b) => order[a.k] - order[b.k] || (a.date || '9').localeCompare(b.date || '9'));
+}
+function checklistProgress(t, key, list) {
+  const st = t[key] || {}; const done = list.filter(([k, , , auto]) => (st[k] && st[k].done) || (auto && auto(t))).length;
+  return {done, total:list.length};
+}
+
+/* ================= Rendering: tables & forms ================= */
+function colLabel(S, c) { if (typeof c === 'object') return c.l; const f = S.fields.find(x => x.k === c); return f ? f.l : c; }
+function fmtVal(f, v) {
+  if (v === undefined || v === null || v === '') return '';
+  if (!f) return esc(v);
+  if (f.t === 'date') return esc(fmtDate(v));
+  if (f.t === 'datetime-local') return esc(fmtDT(v));
+  if (f.t === 'money') return money(v);
+  if (f.t === 'checkbox') return v ? 'Yes' : 'No';
+  if (f.t === 'ref') return esc(titleOf(f.to, v));
+  if (f.t === 'refs') return esc((v || []).map(id => titleOf(f.to, id)).join(', '));
+  if (f.t === 'select' && f.opts && typeof f.opts[0] === 'object') { const o = f.opts.find(o => o.v === v); return esc(o ? o.l : v); }
+  return esc(v);
+}
+function cell(S, c, r) { if (typeof c === 'object') return c.v(r); return fmtVal(S.fields.find(x => x.k === c), r[c]); }
+function table(entity, rows, cols, empty) {
+  const S = SCHEMAS[entity]; cols = cols || S.cols;
+  if (!rows.length) return `<p class="empty">${esc(empty || 'Nothing recorded yet.')}</p>`;
+  return `<div class="tbl-wrap"><table class="tbl"><thead><tr>${cols.map(c => `<th>${esc(colLabel(S, c))}</th>`).join('')}</tr></thead><tbody>${
+    rows.map(r => `<tr data-open="${entity}:${r.id}">${cols.map(c => `<td data-label="${esc(colLabel(S, c))}">${cell(S, c, r) || '&nbsp;'}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+}
+const colsWithout = (entity, key) => SCHEMAS[entity].cols.filter(c => c !== key && !(typeof c === 'object' && c.l.toLowerCase() === key));
+function normOpts(f) { const o = typeof f.opts === 'function' ? f.opts() : f.opts; return o.map(x => typeof x === 'string' ? {v:x, l:x} : x); }
+function renderFields(entity, rec) {
+  return SCHEMAS[entity].fields.map(f => {
+    if (f.t === 'section') return `<h3 class="fsec">${esc(f.l)}</h3>`;
+    let v = rec[f.k]; if (v === undefined && !rec.id) v = typeof f.def === 'function' ? f.def() : f.def;
+    const n = `name="${f.k}"`, rq = f.req ? ' required' : '', ph = f.ph ? ` placeholder="${esc(f.ph)}"` : '';
+    const hint = f.hint ? `<small>${esc(f.hint)}</small>` : '';
+    const lab = `<span>${esc(f.l)}${f.req ? ' *' : ''}</span>`;
+    let input;
+    switch (f.t) {
+      case 'checkbox': return `<label class="field chk"><input type="checkbox" ${n}${v ? ' checked' : ''}>${lab}</label>`;
+      case 'refs': {
+        const opts = all(f.to).slice().sort((a, b) => SCHEMAS[f.to].title(a).localeCompare(SCHEMAS[f.to].title(b)));
+        const sel = v || [];
+        return `<div class="field wide">${lab}<div class="checks">${opts.length ? opts.map(o => `<label><input type="checkbox" name="${f.k}" value="${o.id}"${sel.includes(o.id) ? ' checked' : ''}> ${esc(SCHEMAS[f.to].title(o))}</label>`).join('') : `<span class="muted">None yet – add them on the ${esc(SCHEMAS[f.to].label)} page first.</span>`}</div>${hint}</div>`;
+      }
+      case 'textarea': input = `<textarea ${n} rows="3"${rq}${ph}>${esc(v)}</textarea>`; break;
+      case 'select': {
+        const opts = normOpts(f);
+        input = `<select ${n}${rq}><option value="">— choose —</option>${opts.map(o => `<option value="${esc(o.v)}"${o.v === v ? ' selected' : ''}>${esc(o.l)}</option>`).join('')}${v && !opts.some(o => o.v === v) ? `<option selected value="${esc(v)}">${esc(v)}</option>` : ''}</select>`; break;
+      }
+      case 'ref': {
+        const opts = all(f.to).slice().sort((a, b) => SCHEMAS[f.to].title(a).localeCompare(SCHEMAS[f.to].title(b)));
+        input = `<select ${n}${rq}><option value="">— choose —</option>${opts.map(o => `<option value="${o.id}"${o.id === v ? ' selected' : ''}>${esc(SCHEMAS[f.to].title(o))}</option>`).join('')}</select>`; break;
+      }
+      case 'money': input = `<input type="number" step="0.01" min="0" inputmode="decimal" ${n} value="${esc(v)}"${rq}${ph}>`; break;
+      default: input = `<input type="${f.t}" ${n} value="${esc(v)}"${rq}${ph}>`;
+    }
+    return `<label class="field${f.wide || f.t === 'textarea' ? ' wide' : ''}">${lab}${input}${hint}</label>`;
+  }).join('');
+}
+function readForm(entity, form, rec) {
+  for (const f of SCHEMAS[entity].fields) {
+    if (f.t === 'section') continue;
+    if (f.t === 'refs') { rec[f.k] = $$(`input[name="${f.k}"]:checked`, form).map(i => i.value); continue; }
+    const el = form.elements[f.k]; if (!el) continue;
+    if (f.t === 'checkbox') rec[f.k] = el.checked;
+    else if (f.t === 'money' || f.t === 'number') rec[f.k] = el.value === '' ? '' : Number(el.value);
+    else rec[f.k] = el.value.trim();
+  }
+  return rec;
+}
+function filesListHTML(owner) {
+  const fs = filesFor(owner);
+  return fs.length ? `<ul class="files">${fs.map(f => `<li><span>${ico('clip')}${esc(f.name)} <small class="muted">${fmtSize(f.size)} · ${esc(fmtDate(f.added))}</small></span><button type="button" class="sm" data-act="openFile" data-id="${f.id}">Open</button><button type="button" class="sm danger" data-act="delFile" data-id="${f.id}">Remove</button></li>`).join('')}</ul>` : '';
+}
+function showModal(html) { $('#mbox').innerHTML = html; $('#modal').classList.remove('hidden'); document.body.style.overflow = 'hidden'; const f = $('#mbox input:not([type=hidden]),#mbox select,#mbox textarea'); if (f && innerWidth > 860) f.focus(); }
+function closeModal() { $('#modal').classList.add('hidden'); $('#mbox').innerHTML = ''; document.body.style.overflow = ''; }
+let pendingFiles = [];
+function openForm(entity, rec = {}, opts = {}) {
+  const S = SCHEMAS[entity], r = JSON.parse(JSON.stringify(rec)), isNew = !r.id;
+  pendingFiles = [];
+  const owner = entity + ':' + r.id;
+  const actions = (S.formActions || []).map((a, i) => a.show(r) ? `<button type="button" id="fa${i}">${esc(a.l)}</button>` : '').join('');
+  showModal(`<form id="recForm"><div class="mhead"><h2>${isNew ? 'Add' : 'Edit'} ${esc(S.one.toLowerCase())}</h2><button type="button" class="x" data-act="closeModal" aria-label="Close">×</button></div>
+    ${S.intro && isNew ? `<p class="notice">${esc(S.intro)}</p>` : ''}
+    <div class="grid">${renderFields(entity, r)}</div>
+    <div class="attach"><h3>Attachments (certificates, photos, signed agreements, receipts…)</h3>
+      <div id="attList">${isNew ? '' : filesListHTML(owner)}</div>
+      <input type="file" id="attInput" multiple><div id="attPending" class="small muted"></div></div>
+    <div class="mfoot">${isNew ? '' : '<button type="button" class="danger" id="delBtn">Delete</button>'}${actions}<span class="sp"></span>
+      <button type="button" data-act="closeModal">Cancel</button><button type="submit" class="primary">Save</button></div></form>`);
+  const form = $('#recForm');
+  form.addEventListener('change', e => { if (S.onChange) S.onChange(form, e.target.name); });
+  $('#attInput').onchange = e => { pendingFiles.push(...e.target.files); $('#attPending').textContent = 'Will be attached on save: ' + pendingFiles.map(f => f.name).join(', '); e.target.value = ''; };
+  (S.formActions || []).forEach((a, i) => { const b = $('#fa' + i); if (b) b.onclick = () => a.run(readForm(entity, form, r)); });
+  form.onsubmit = async e => {
+    e.preventDefault(); if (!form.reportValidity()) return;
+    readForm(entity, form, r);
+    const saved = await upsert(entity, r);
+    for (const f of pendingFiles) await addFile(entity + ':' + saved.id, f);
+    pendingFiles = []; closeModal(); toast('Saved');
+    if (opts.after) opts.after(saved); else route();
+  };
+  if (!isNew) $('#delBtn').onclick = async () => {
+    const refs = referencesTo(entity, r.id);
+    if (refs.length) return alert(`This ${S.one.toLowerCase()} is still used by: ${refs.join(', ')}.\nDelete or change those first.`);
+    if (!confirm(`Delete this ${S.one.toLowerCase()} and its attachments? This cannot be undone.`)) return;
+    await removeRec(entity, r.id); closeModal(); toast('Deleted');
+    if (S.detail && location.hash.includes(r.id)) location.hash = '#/' + entity; else route();
+  };
+}
+
+/* ================= Pages ================= */
+const NAV = [
+  ['Overview'], ['dashboard', 'Dashboard'],
+  ['Portfolio'], ['properties', 'Properties'], ['compliance', 'Compliance'], ['utilities', 'Utilities & meters'],
+  ['Letting'], ['viewings', 'Viewings'], ['tenants', 'Tenants'], ['tenancies', 'Tenancies'],
+  ['Running'], ['inspections', 'Inspections'], ['maintenance', 'Repairs'], ['money', 'Money'], ['tasks', 'Tasks'], ['contacts', 'Contacts'], ['documents', 'Documents'],
+  ['Help'], ['guide', 'Landlord guide'], ['settings', 'Backup & settings'],
+];
+function renderNav(cur) {
+  $('#nav').innerHTML = NAV.map(([k, l]) => l ? `<a href="#/${k}" class="${k === cur ? 'on' : ''}">${ico(k)}${l}</a>` : `<div class="grp">${k}</div>`).join('');
+}
+const addBtn = (entity, pre, label, cls = 'primary') => `<button class="${cls}" data-add="${entity}"${pre ? ` data-pre="${esc(JSON.stringify(pre))}"` : ''}>${esc(label || '+ Add ' + SCHEMAS[entity].one.toLowerCase())}</button>`;
+function pageList(entity, extra = '') {
+  const S = SCHEMAS[entity]; const rows = all(entity).slice().sort(S.sort || (() => 0));
+  return `<div class="phead"><h2>${esc(S.label)}</h2>${addBtn(entity)}</div>${extra}
+    <div class="card">${rows.length > 5 ? '<input class="filter" data-filter placeholder="Filter this list…">' : ''}${table(entity, rows)}</div>`;
+}
+function section(title, entity, rows, pre, cols, empty) {
+  return `<section class="card"><div class="chead"><h3>${esc(title)} <span class="count">(${rows.length})</span></h3>${pre !== false ? `<button class="sm" data-add="${entity}" data-pre="${esc(JSON.stringify(pre || {}))}">+ Add</button>` : ''}</div>${table(entity, rows, cols, empty)}</section>`;
+}
+function alertsHTML(list, max = 100) {
+  if (!list.length) return '<p class="empty">You\'re all caught up. Nothing needs your attention.</p>';
+  return `<ul class="alerts">${list.slice(0, max).map(a => `<li>${badge({bad:'Action', warn:'Soon', info:'Info'}[a.k], a.k)}${a.link ? `<a href="${a.link}">${esc(a.text)}</a>` : `<span>${esc(a.text)}</span>`}</li>`).join('')}</ul>${list.length > max ? `<p class="muted small">…and ${list.length - max} more</p>` : ''}`;
+}
+function complianceMatrix(props) {
+  if (!props.length) return '<p class="empty">Add a property to see its compliance.</p>';
+  const types = CERT_TYPES.filter(c => c.core);
+  return `<div class="tbl-wrap"><table class="tbl matrix"><thead><tr><th>Property</th>${types.map(t => `<th title="${esc(t.l)}">${esc(t.s)}</th>`).join('')}</tr></thead><tbody>${
+    props.map(p => `<tr><td data-label="Property"><a href="#/property/${p.id}">${esc(p.name)}</a></td>${types.map(t => {
+      if (t.when && !t.when(p)) return `<td data-label="${esc(t.s)}"><span class="muted">n/a</span></td>`;
+      const c = latestCert(p.id, t.v), [st, l, k] = certState(c);
+      const kk = st === 'missing' && !t.req ? 'warn' : k;
+      return `<td data-label="${esc(t.s)}">${c ? `<a href="#" data-open="certificates:${c.id}" title="${esc(c.expiryDate ? 'Expires ' + fmtDate(c.expiryDate) : '')}">${badge(l, kk)}</a>` : `<a href="#" data-add="certificates" data-pre="${esc(JSON.stringify({property:p.id, certType:t.v}))}">${badge('Add', kk)}</a>`}</td>`;
+    }).join('')}</tr>`).join('')}</tbody></table></div>`;
+}
+function pageDashboard() {
+  const props = all('properties'), live = all('tenancies').filter(isLive);
+  const arrears = sum(live, t => ledger(t).arrears);
+  const alerts = computeAlerts();
+  const now = new Date().toISOString().slice(0, 16);
+  const upcoming = all('viewings').filter(v => v.when && v.when >= now.slice(0, 10) && v.status === 'Booked').sort((a, b) => a.when.localeCompare(b.when));
+  const monthlyRoll = sum(live, t => (Number(t.rent) || 0) * (PER_YEAR[t.frequency] || 12) / 12);
+  const name = DB.data.settings.landlordName;
+  if (!props.length) return `<div class="card welcome"><img src="icon.svg" alt=""><h2>Welcome${name ? ', ' + esc(name) : ''} to Narly</h2><p class="muted">Everything for your rentals in one simple place.</p><ol><li>Add your first property.</li><li>Record its certificates (Gas, EICR, EPC, alarms, insurance…) with the PDF attached.</li><li>Add tenants and create a tenancy – then work through the move-in checklist.</li><li>Make a backup from <a href="#/settings">Backup & settings</a> regularly.</li></ol>
+    <p>${addBtn('properties', null, '+ Add your first property')} <button data-act="demo">Load example data to explore</button></p>
+    <p class="muted small">Your data stays in this browser on this device. Nothing is sent anywhere.</p></div>`;
+  return `<div class="phead"><h2>Dashboard${name ? ` <span class="muted" style="font-size:15px;font-weight:400">· ${esc(name)}</span>` : ''}</h2>
+      ${addBtn('viewings', null, '+ Viewing', '')} ${addBtn('maintenance', null, '+ Repair', '')} ${addBtn('payments', null, '+ Rent received')}</div>
+    <div class="stats">
+      <a class="stat" href="#/properties"><b>${props.length}</b><span>Properties</span></a>
+      <a class="stat" href="#/tenancies"><b>${live.length}</b><span>Let now · ${props.length - props.filter(p => liveTenancy(p.id)).length} empty</span></a>
+      <a class="stat" href="#/money"><b>${money(monthlyRoll).replace(/\.\d\d$/, '')}</b><span>Monthly rent roll</span></a>
+      <a class="stat" href="#/money"><b style="color:${arrears > 0 ? 'var(--bad)' : 'inherit'}">${money(arrears).replace(/\.\d\d$/, '')}</b><span>Arrears</span></a>
+      <a class="stat" href="#/maintenance"><b>${all('maintenance').filter(isOpenRepair).length}</b><span>Open repairs</span></a>
+      <a class="stat" href="#/compliance"><b style="color:${alerts.some(a => a.k === 'bad') ? 'var(--bad)' : 'inherit'}">${alerts.filter(a => a.k === 'bad').length}</b><span>Need action now</span></a>
+    </div>
+    <div class="card"><div class="chead"><h3>Needs attention</h3><button class="sm" data-act="ics">${ico('calendar')}Add to calendar</button></div>${alertsHTML(alerts, 25)}</div>
+    <div class="card"><div class="chead"><h3>Compliance at a glance</h3></div>${complianceMatrix(props)}</div>
+    ${section('Upcoming viewings', 'viewings', upcoming, {}, undefined, 'No viewings booked.')}`;
+}
+function kvHTML(entity, r, keys) {
+  const S = SCHEMAS[entity];
+  return `<div class="kv">${keys.map(k => { const f = S.fields.find(x => x.k === k); const v = fmtVal(f, r[k]); return v ? `<div><span>${esc(f.l)}</span>${v}</div>` : ''; }).join('')}</div>`;
+}
+function pageProperty(id) {
+  const p = byId('properties', id); if (!p) return '<p>Property not found. <a href="#/properties">Back</a></p>';
+  const by = e => all(e).filter(r => r.property === id).sort(SCHEMAS[e].sort || (() => 0));
+  const tens = by('tenancies');
+  const recorded = [...new Set(by('certificates').map(c => c.certType))];
+  const types = [...coreTypes(p), ...CERT_TYPES.filter(c => !c.core && recorded.includes(c.v))];
+  const files = filesFor('properties:' + id);
+  return `<div class="phead"><h2>${esc(p.name)} ${occBadge(p)}</h2><button data-act="edit" data-e="properties" data-id="${id}">Edit details</button><button data-act="print">Print</button></div>
+    <div class="card"><p style="margin-top:0"><b>${esc(addr(p))}</b> <span class="muted">· ${esc(p.nation || '')}</span></p>
+      ${kvHTML('properties', p, ['type','bedrooms','furnished','council','councilTaxBand','lender','mortgageRef','fixEnd','purchaseDate','purchasePrice','targetRent','keys','notes'])}
+      ${files.length ? `<h4>Attachments</h4>${filesListHTML('properties:' + id)}` : ''}</div>
+    <section class="card"><div class="chead"><h3>Compliance</h3>${addBtn('certificates', {property:id}, '+ Add certificate')}</div>
+      <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Requirement</th><th>Status</th><th>Expires</th><th>Result</th><th></th></tr></thead><tbody>${types.map(t => {
+        const c = latestCert(id, t.v), [st, l, k] = certState(c);
+        return `<tr><td data-label="Requirement">${esc(t.l)}${t.req ? '' : ' <span class="muted small">(recommended)</span>'}</td><td data-label="Status">${badge(l, st === 'missing' && !t.req ? 'warn' : k)}</td><td data-label="Expires">${c ? esc(fmtDate(c.expiryDate)) : ''}</td><td data-label="Result">${c ? esc(c.result || '') : ''}</td>
+          <td>${c ? `<button class="sm" data-open="certificates:${c.id}">View</button> ` : ''}<button class="sm" data-add="certificates" data-pre="${esc(JSON.stringify({property:id, certType:t.v}))}">${c ? 'Renew' : 'Add'}</button></td></tr>`; }).join('')}</tbody></table></div>
+      <details><summary class="small muted">All certificates incl. history (${by('certificates').length})</summary>${table('certificates', by('certificates'), colsWithout('certificates', 'property'))}</details></section>
+    ${section('Tenancies', 'tenancies', tens, {property:id}, colsWithout('tenancies', 'property'))}
+    <div class="cols2">${section('Viewings', 'viewings', by('viewings'), {property:id}, colsWithout('viewings', 'property'))}
+    ${section('Repairs', 'maintenance', by('maintenance'), {property:id}, colsWithout('maintenance', 'property'))}</div>
+    <div class="cols2">${section('Inspections', 'inspections', by('inspections'), {property:id}, colsWithout('inspections', 'property'))}
+    ${section('Tasks', 'tasks', by('tasks'), {property:id}, colsWithout('tasks', 'property'))}</div>
+    <div class="cols2">${section('Utilities & accounts', 'utilities', by('utilities'), {property:id}, colsWithout('utilities', 'property'))}
+    ${section('Meter readings', 'meterReadings', by('meterReadings'), {property:id}, colsWithout('meterReadings', 'property'))}</div>
+    ${section('Expenses', 'expenses', by('expenses'), {property:id}, colsWithout('expenses', 'property'))}`;
+}
+function checklistHTML(t, key, list) {
+  const st = t[key] || {}, pr = checklistProgress(t, key, list);
+  return `<div class="small muted">${pr.done} of ${pr.total} done</div><div class="progress"><i style="width:${pr.done / pr.total * 100}%"></i></div>
+  <ul class="checklist">${list.map(([k, l, hint, auto]) => { const s = st[k] || {}; const a = auto && auto(t); const done = s.done || a;
+    return `<li class="${done ? 'done' : ''}"><input type="checkbox" data-ck="${t.id}|${key}|${k}" ${done ? 'checked' : ''}${a ? ' disabled' : ''}><div><span class="lbl">${esc(l)}</span>${hint ? `<small>${esc(hint)}</small>` : ''}</div>
+      <input type="date" title="Date done" data-ckd="${t.id}|${key}|${k}" value="${esc(s.date || '')}"></li>`; }).join('')}</ul>`;
+}
+function pageTenancy(id) {
+  const t = byId('tenancies', id); if (!t) return '<p>Tenancy not found. <a href="#/tenancies">Back</a></p>';
+  const L = ledger(t), wr = weeklyRent(t);
+  const warn = [];
+  if (t.deposit && wr && t.deposit > wr * 5 + 0.5 && wr * 52 < 50000) warn.push(`Deposit ${money(t.deposit)} is above the 5-week cap (${money(wr * 5)}).`);
+  if (t.holdingDeposit && wr && t.holdingDeposit > wr + 0.5) warn.push(`Holding deposit is above 1 week's rent (${money(wr)}).`);
+  if (t.deposit && !t.depositProtectedDate) warn.push(`Deposit not yet protected – deadline ${fmtDate(addDays(t.depositReceived || t.startDate, 30))}.`);
+  const tenants = (t.tenants || []).map(i => byId('tenants', i)).filter(Boolean);
+  const events = [...L.due.map(d => ({d, desc:'Rent due', debit:Number(t.rent)})), ...L.pays.map(p => ({d:p.date, desc:`Payment received (${p.method || ''})`, credit:Number(p.amount), id:p.id}))]
+    .sort((a, b) => a.d.localeCompare(b.d) || (a.debit ? -1 : 1));
+  let bal = 0; const rows = events.map(e => { bal += (e.credit || 0) - (e.debit || 0); return {...e, bal}; }).reverse();
+  return `<div class="phead"><h2>Tenancy ${statusBadge(t.status)}</h2>
+      <button data-act="edit" data-e="tenancies" data-id="${id}">Edit</button>
+      ${t.status === 'Pipeline' ? `<button data-act="setStatus" data-id="${id}" data-s="Active">Mark as moved in</button>` : ''}
+      ${t.status === 'Active' ? `<button data-act="setStatus" data-id="${id}" data-s="Notice given">Record notice / start ending</button>` : ''}
+      ${t.status === 'Notice given' ? `<button data-act="setStatus" data-id="${id}" data-s="Ended">Mark as ended</button>` : ''}
+      <button data-act="print">Print</button></div>
+    ${warn.map(w => `<div class="notice warn">${ico('alert')} ${esc(w)}</div>`).join('')}
+    <div class="card"><p style="margin-top:0"><a href="#/property/${t.property}"><b>${esc(propName(t.property))}</b></a></p>
+      ${kvHTML('tenancies', t, ['type','startDate','endDate','rent','frequency','paymentMethod','rentReviewDate','holdingDeposit','deposit','depositReceived','depositScheme','depositRef','depositProtectedDate','prescribedInfoDate','notes'])}
+      ${filesFor('tenancies:' + id).length ? `<h4>Attachments</h4>${filesListHTML('tenancies:' + id)}` : '<p class="small muted">Tip: attach the signed agreement, deposit certificate and inventory via Edit.</p>'}</div>
+    <section class="card"><div class="chead"><h3>Tenants</h3></div>${tenants.length ? table('tenants', tenants) : '<p class="empty">No tenants linked – click Edit to tick them.</p>'}</section>
+    <div class="cols2">
+      <section class="card"><div class="chead"><h3>Move-in checklist</h3></div>${checklistHTML(t, 'onboarding', ONBOARD)}</section>
+      <section class="card"><div class="chead"><h3>Move-out checklist</h3></div>
+        ${t.noticeType || t.noticeServedDate ? kvHTML('tenancies', t, ['noticeBy','noticeType','noticeServedDate','noticeExpiry','noticeGrounds','depositDeductions','depositReturned','depositReturnedDate']) + '<br>' : '<p class="small muted">When notice is given, click Edit and fill in “Notice & termination”.</p>'}
+        ${checklistHTML(t, 'offboarding', OFFBOARD)}</section>
+    </div>
+    <section class="card"><div class="chead"><h3>Rent account</h3>${addBtn('payments', {tenancy:id, amount:t.rent, date:todayStr()}, '+ Record payment')}</div>
+      <div class="kv"><div><span>Rent charged to date</span>${money(L.expected)}</div><div><span>Paid to date</span>${money(L.paid)}</div><div><span>Balance</span>${balanceBadge(t) || '—'}</div></div><br>
+      ${rows.length ? `<div class="tbl-wrap" style="max-height:380px;overflow-y:auto"><table class="tbl"><thead><tr><th>Date</th><th>Item</th><th class="num">Due</th><th class="num">Paid</th><th class="num">Balance</th></tr></thead><tbody>${rows.map(e => `<tr${e.id ? ` data-open="payments:${e.id}"` : ''}><td data-label="Date">${esc(fmtDate(e.d))}</td><td data-label="Item">${esc(e.desc)}</td><td class="num" data-label="Due">${e.debit ? money(e.debit) : ''}</td><td class="num" data-label="Paid">${e.credit ? money(e.credit) : ''}</td><td class="num" data-label="Balance" style="color:${e.bal < -0.5 ? 'var(--bad)' : 'inherit'}">${money(e.bal)}</td></tr>`).join('')}</tbody></table></div>` : '<p class="empty">No rent due yet.</p>'}
+    </section>
+    ${section('Inspections at this property', 'inspections', all('inspections').filter(i => i.property === t.property && i.date >= (t.startDate || '')), {property:t.property}, colsWithout('inspections', 'property'))}`;
+}
+function pageCompliance() {
+  const props = all('properties').slice().sort(SCHEMAS.properties.sort);
+  return `<div class="phead"><h2>Compliance</h2>${addBtn('certificates', null, '+ Add certificate')}<button data-act="ics">${ico('calendar')}Calendar reminders</button></div>
+    <div class="notice">Green = valid · Amber = due within ${DB.data.settings.warnDays || 60} days · Red = expired, missing or due within 30 days. Only the latest certificate of each type counts. Click a cell to view or add.</div>
+    <div class="card">${complianceMatrix(props)}</div>
+    <div class="card"><div class="chead"><h3>All certificates</h3></div><input class="filter" data-filter placeholder="Filter…">${table('certificates', all('certificates').slice().sort(SCHEMAS.certificates.sort))}</div>`;
+}
+function pageUtilities() {
+  return `<div class="phead"><h2>Utilities & meters</h2>${addBtn('utilities')} ${addBtn('meterReadings', null, '+ Meter reading')}</div>
+    ${section('Utility & council tax accounts', 'utilities', all('utilities').slice().sort(SCHEMAS.utilities.sort), {})}
+    ${section('Meter readings', 'meterReadings', all('meterReadings').slice().sort(SCHEMAS.meterReadings.sort), {})}`;
+}
+function taxYearStart(d) { const y = +d.slice(0, 4); return d >= `${y}-04-06` ? y : y - 1; }
+function pageMoney(arg) {
+  const ty = arg ? +arg : taxYearStart(todayStr());
+  const from = `${ty}-04-06`, to = `${ty + 1}-04-05`, inYr = d => d && d >= from && d <= to;
+  const pays = all('payments').filter(p => inYr(p.date)), exps = all('expenses').filter(e => inYr(e.date));
+  const years = [...new Set([taxYearStart(todayStr()), ...all('payments').map(p => taxYearStart(p.date)), ...all('expenses').map(e => taxYearStart(e.date))])].sort().reverse();
+  const props = all('properties');
+  const rowsFor = pid => { const inc = sum(pays.filter(p => (byId('tenancies', p.tenancy) || {}).property === pid), p => p.amount);
+    const ex = exps.filter(e => (e.property || '') === pid); const mi = sum(ex.filter(e => e.category === 'Mortgage interest'), e => e.amount); const other = sum(ex, e => e.amount) - mi;
+    return {inc, other, mi, net: inc - other}; };
+  const lines = [...props.map(p => ({name:p.name, ...rowsFor(p.id)})), {name:'Portfolio-wide costs', ...rowsFor('')}];
+  const tot = {inc:sum(lines, l => l.inc), other:sum(lines, l => l.other), mi:sum(lines, l => l.mi)}; tot.net = tot.inc - tot.other;
+  const live = all('tenancies').filter(isLive);
+  return `<div class="phead"><h2>Money</h2>${addBtn('payments', null, '+ Rent received')} ${addBtn('expenses', null, '+ Expense')}</div>
+    <div class="notice">No bank connection – record rent and costs by hand. Mortgage interest is shown separately because individual landlords get a 20% tax credit for it rather than deducting it. Check with your accountant / HMRC.</div>
+    <div class="tabs">${years.map(y => `<a href="#/money/${y}" class="${y === ty ? 'on' : ''}">Tax year ${y}/${String(y + 1).slice(2)}</a>`).join('')}</div>
+    <section class="card"><div class="chead"><h3>Income & expenses ${fmtDate(from)} – ${fmtDate(to)}</h3><button class="sm" data-act="csvYear" data-y="${ty}">Export CSV</button></div>
+      <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Property</th><th class="num">Rent received</th><th class="num">Allowable expenses</th><th class="num">Mortgage interest</th><th class="num">Profit before interest</th></tr></thead><tbody>
+      ${lines.filter(l => l.inc || l.other || l.mi || l.name !== 'Portfolio-wide costs').map(l => `<tr><td data-label="Property">${esc(l.name)}</td><td class="num" data-label="Rent">${money(l.inc)}</td><td class="num" data-label="Expenses">${money(l.other)}</td><td class="num" data-label="Mortgage interest">${money(l.mi)}</td><td class="num" data-label="Profit"><b>${money(l.net)}</b></td></tr>`).join('')}
+      <tr><td data-label="Total"><b>Total</b></td><td class="num" data-label="Rent"><b>${money(tot.inc)}</b></td><td class="num" data-label="Expenses"><b>${money(tot.other)}</b></td><td class="num" data-label="Mortgage interest"><b>${money(tot.mi)}</b></td><td class="num" data-label="Profit"><b>${money(tot.net)}</b></td></tr></tbody></table></div></section>
+    <section class="card"><div class="chead"><h3>Rent accounts (current tenancies)</h3></div>${table('tenancies', live, [{l:'Tenancy', v:r => esc(SCHEMAS.tenancies.title(r))}, {l:'Rent', v:r => money(r.rent) + ' ' + esc((r.frequency || '').toLowerCase())}, {l:'Charged', v:r => money(ledger(r).expected)}, {l:'Paid', v:r => money(ledger(r).paid)}, {l:'Balance', v:r => balanceBadge(r)}], 'No current tenancies.')}</section>
+    ${section('Rent received this tax year', 'payments', pays.sort(SCHEMAS.payments.sort), {})}
+    ${section('Expenses this tax year', 'expenses', exps.sort(SCHEMAS.expenses.sort), {})}`;
+}
+function pageDocuments() {
+  const fs = DB.data.filesIndex.slice().sort((a, b) => (b.added || '').localeCompare(a.added || ''));
+  return `<div class="phead"><h2>Documents</h2><label class="btn primary">+ Upload general document<input type="file" multiple hidden data-act-change="uploadGeneral"></label></div>
+    <div class="notice">Every attachment from every record, in one place. Files are stored inside the app on this device and are included in backups.</div>
+    <div class="card">${fs.length ? `<input class="filter" data-filter placeholder="Filter…"><div class="tbl-wrap"><table class="tbl"><thead><tr><th>File</th><th>Belongs to</th><th>Added</th><th>Size</th><th></th></tr></thead><tbody>${fs.map(f => `<tr><td data-label="File">${esc(f.name)}</td><td data-label="Belongs to">${ownerLink(f.owner) ? `<a href="${ownerLink(f.owner)}">${esc(ownerTitle(f.owner))}</a>` : f.owner === 'general' ? 'General' : `<a href="#" data-open="${f.owner}">${esc(ownerTitle(f.owner))}</a>`}</td><td data-label="Added">${esc(fmtDate(f.added))}</td><td data-label="Size">${fmtSize(f.size)}</td><td><button class="sm" data-act="openFile" data-id="${f.id}">Open</button> <button class="sm danger" data-act="delFile" data-id="${f.id}">Remove</button></td></tr>`).join('')}</tbody></table></div>` : '<p class="empty">No documents yet. Attach files when you add or edit any record.</p>'}</div>`;
+}
+function pageSearch(q) {
+  q = decodeURIComponent(q || '').toLowerCase().trim();
+  if (!q) return '<p>Type in the search box above.</p>';
+  let out = '';
+  for (const e of ENTITIES) {
+    const rows = all(e).filter(r => (JSON.stringify(r) + ' ' + SCHEMAS[e].title(r)).toLowerCase().includes(q));
+    if (rows.length) out += section(SCHEMAS[e].label, e, rows, false);
+  }
+  const fs = DB.data.filesIndex.filter(f => f.name.toLowerCase().includes(q));
+  if (fs.length) out += `<div class="card"><h3>Documents</h3><ul class="files">${fs.map(f => `<li><span>${ico('clip')}${esc(f.name)} – ${esc(ownerTitle(f.owner))}</span><button class="sm" data-act="openFile" data-id="${f.id}">Open</button></li>`).join('')}</ul></div>`;
+  return `<div class="phead"><h2>Search: “${esc(q)}”</h2></div>${out || '<p class="empty">No matches.</p>'}`;
+}
+function pageGuide() {
+  return `<div class="phead"><h2>UK landlord guide</h2></div>
+  <div class="notice warn">A quick memory aid, not legal advice. Rules change and differ between England, Wales, Scotland and Northern Ireland – always check gov.uk / gov.wales / mygov.scot / nidirect before acting.</div>
+  <div class="card guide">
+  <h3>Safety certificates (most of the UK)</h3><ul>
+   <li><b>Gas safety (CP12)</b> – every 12 months by a Gas Safe engineer; copy to existing tenants within 28 days and to new tenants before they move in.</li>
+   <li><b>Electrical (EICR)</b> – at least every 5 years by a qualified electrician; copy to tenants; remedial work usually within 28 days.</li>
+   <li><b>EPC</b> – valid 10 years; must be given to tenants. England & Wales: minimum rating E to let (unless exempt and registered). Plans to raise the minimum to C are being phased in – check the current deadline.</li>
+   <li><b>Smoke alarms</b> on every storey and <b>CO alarms</b> in rooms with a fixed combustion appliance (not just gas cookers); test on day one of each tenancy and repair when reported. Scotland requires interlinked heat/smoke alarms.</li>
+   <li><b>Legionella</b> – risk assessment of the water system (no fixed interval; review regularly/when things change).</li>
+   <li><b>Furniture</b> supplied must meet fire safety rules; <b>PAT testing</b> is recommended (required for HMOs in some areas).</li>
+   <li><b>HMOs</b> – licence if 5+ people from 2+ households (mandatory); councils may also require additional/selective licences for other lets.</li></ul>
+  <h3>Before a tenancy starts (England)</h3><ul>
+   <li><b>Right to Rent</b> checks on all adults; repeat checks for time-limited permission.</li>
+   <li><b>Holding deposit</b> max 1 week's rent; <b>tenancy deposit</b> max 5 weeks' rent (6 weeks if annual rent is £50k+).</li>
+   <li>Protect the deposit in a government scheme (DPS, TDS, mydeposits) and serve <b>prescribed information</b> within 30 days.</li>
+   <li>Give a copy of the EPC, gas certificate, EICR and any required government information (e.g. How to Rent / the Renters' Rights information sheet).</li>
+   <li>Do an inventory & schedule of condition with photos, and take meter readings.</li></ul>
+  <h3>Renters' Rights Act (England)</h3><ul>
+   <li>From 1 May 2026 most private tenancies are <b>assured periodic</b> tenancies – no fixed terms, and <b>Section 21 “no-fault” evictions are abolished</b>. Landlords must use <b>Section 8</b> grounds (e.g. selling, moving in, rent arrears, anti-social behaviour) with the required notice periods.</li>
+   <li>Tenants can leave with 2 months' notice. Rent can be increased at most once a year using a <b>Section 13</b> notice; tenants can challenge at tribunal.</li>
+   <li>Rental bidding is banned, you cannot refuse tenants just because they have children or receive benefits, and tenants can ask to keep a pet (you can't unreasonably refuse).</li>
+   <li>A landlord <b>database</b> and a private rented sector <b>ombudsman</b>, plus the Decent Homes Standard and Awaab's Law for private rentals, are being phased in – check gov.uk for dates.</li></ul>
+  <h3>Wales, Scotland, Northern Ireland</h3><ul>
+   <li><b>Wales</b> – Renting Homes (Wales) Act: occupation contracts, written statement within 14 days, Rent Smart Wales registration & licence, EICR every 5 years, smoke & CO alarms.</li>
+   <li><b>Scotland</b> – landlord registration with the council, Private Residential Tenancies, Notice to Leave, EICR & PAT every 5 years, gas annually, interlinked alarms, legionella assessment, deposit protection within 30 working days.</li>
+   <li><b>Northern Ireland</b> – landlord registration, tenancy information notice within 28 days, deposit protection within 28 days, gas annually, electrical checks at least every 5 years.</li></ul>
+  <h3>During and at the end of the tenancy</h3><ul>
+   <li>Give at least 24 hours' written notice before visits; do routine inspections (often every 3–6 months).</li>
+   <li>Deal with repairs promptly – especially damp and mould, heating and hot water.</li>
+   <li>At the end: check-out vs inventory, final meter readings, tell council & suppliers, return the deposit within 10 days of agreeing deductions.</li>
+   <li>Keep records: Self Assessment for rental income; Making Tax Digital for Income Tax applies to landlords above the income thresholds from April 2026 onwards.</li></ul>
+  </div>`;
+}
+function pageSettings() {
+  const s = DB.data.settings;
+  const counts = ENTITIES.map(e => `${SCHEMAS[e].label}: ${all(e).length}`).join(' · ');
+  return `<div class="phead"><h2>Backup & settings</h2></div>
+  <div class="card"><h3 style="margin-top:0">Backups – important</h3>
+    <p>Your data lives <b>only in this browser on this device</b>. If you clear browser data, change browser or lose the device, it is gone – unless you have a backup. Save backups to a USB stick or a free cloud drive (OneDrive, Google Drive, iCloud).</p>
+    <p class="small muted">Last backup: ${s.lastBackup ? fmtDate(s.lastBackup) : 'never'} · ${counts} · Files: ${DB.data.filesIndex.length}</p>
+    <p><button class="primary" data-act="backup">${ico('download')}Download full backup</button>
+    <label class="btn">${ico('upload')}Restore from backup<input type="file" accept=".json,application/json" hidden data-act-change="restore"></label></p>
+    <p class="small muted">To move to another computer or phone: download a backup here, open the app there, and restore it. When login is on, backups are encrypted with your password.</p></div>
+  <div class="card"><h3 style="margin-top:0">Login & security</h3><div id="loginSettings">Loading…</div></div>
+  <div class="card"><h3 style="margin-top:0">Reminders & exports</h3>
+    <p><button data-act="ics">${ico('calendar')}Calendar reminders (.ics)</button> <span class="small muted">Import into Google Calendar, Outlook or Apple Calendar – includes certificate expiries, rent reviews, notices, inspections and tasks, with an alert 30 days before.</span></p>
+    <p><button data-act="csv" data-e="payments">Rent received CSV</button> <button data-act="csv" data-e="expenses">Expenses CSV</button> <button data-act="csv" data-e="certificates">Certificates CSV</button> <button data-act="csv" data-e="tenants">Tenants CSV</button></p></div>
+  <div class="card"><h3 style="margin-top:0">Settings</h3><form id="setForm" class="grid">
+    <label class="field"><span>Your name (shown on dashboard)</span><input name="landlordName" value="${esc(s.landlordName || '')}"></label>
+    <label class="field"><span>Warn me this many days before expiry</span><input name="warnDays" type="number" min="7" max="365" value="${esc(s.warnDays || 60)}"></label>
+    <div><button class="primary" type="submit">Save settings</button></div></form></div>
+  <div class="card"><h3 style="margin-top:0">Danger zone</h3>
+    <p><button data-act="demo">Load example data</button> <button class="danger" data-act="wipe">Delete ALL data on this device</button></p>
+    <p class="small muted" id="storageInfo"></p></div>`;
+}
+const PAGES = {
+  dashboard: pageDashboard, properties: () => pageList('properties'), property: pageProperty,
+  tenancies: () => pageList('tenancies'), tenancy: pageTenancy, tenants: () => pageList('tenants'),
+  viewings: () => pageList('viewings', '<div class="notice">Log every enquiry and viewing. When someone applies, open the viewing and click “Create tenant from this applicant”.</div>'),
+  compliance: pageCompliance, inspections: () => pageList('inspections', '<div class="notice">Record check-ins, routine inspections, alarm tests and check-outs. Attach photos and the signed inventory.</div>'),
+  maintenance: () => pageList('maintenance'), utilities: pageUtilities, money: pageMoney,
+  tasks: () => pageList('tasks'), contacts: () => pageList('contacts'), documents: pageDocuments,
+  guide: pageGuide, settings: pageSettings, search: pageSearch,
+};
+function route() {
+  const [view, arg] = (location.hash.replace(/^#\/?/, '') || 'dashboard').split('/');
+  const fn = PAGES[view] || pageDashboard;
+  const navKey = {property:'properties', tenancy:'tenancies'}[view] || view;
+  renderNav(navKey);
+  const y = scrollY;
+  $('#main').innerHTML = fn(arg);
+  if (route.last === location.hash) scrollTo(0, y); else scrollTo(0, 0);
+  route.last = location.hash;
+  $('#nav').classList.remove('open');
+  if (view === 'settings') loginSettingsHTML().then(h => { const el = $('#loginSettings'); if (el) el.innerHTML = h; });
+  DB.get('kv', 'auth').then(a => { $('#lockBtn').classList.toggle('hidden', !(a && a.enabled)); });
+  if (view === 'settings' && navigator.storage && navigator.storage.estimate) navigator.storage.estimate().then(e => { const el = $('#storageInfo'); if (el) el.textContent = `Storage used: ${fmtSize(e.usage || 0)} of about ${fmtSize(e.quota || 0)} available to this app.`; });
+}
+
+/* ================= Backup, exports, calendar ================= */
+const blobToB64 = b => new Promise(res => { const r = new FileReader(); r.onload = () => res(String(r.result).split(',')[1] || ''); r.readAsDataURL(b); });
+function b64ToBlob(b64, type) { const bin = atob(b64), u = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i); return new Blob([u], {type}); }
+async function backup() {
+  toast('Preparing backup…');
+  const files = [];
+  for (const m of DB.data.filesIndex) { const b = await DB.fget(m.id); if (b) files.push({...m, data: await blobToB64(b)}); }
+  const data = {}; for (const e of ENTITIES) data[e] = all(e);
+  const exported = new Date().toISOString();
+  let out = JSON.stringify({app:'landlord-desk', version:1, exported, settings:DB.data.settings, data, files});
+  const auth = await DB.get('kv', 'auth');
+  if (DB.key && auth && auth.enabled) { // login on → backup is encrypted with the same password
+    const {iv, ct} = await Crypt.enc(DB.key, new TextEncoder().encode(out));
+    out = JSON.stringify({app:'landlord-desk', version:1, exported, encrypted:true, salt:u8ToB64(auth.salt), iter:auth.iter, iv:u8ToB64(iv), ct:u8ToB64(ct)});
+  }
+  download(`narly-properties-backup-${todayStr()}.json`, out, 'application/json');
+  DB.data.settings.lastBackup = todayStr(); await DB.save('settings'); route();
+}
+async function restore(file) {
+  let j; try { j = JSON.parse(await file.text()); } catch { return alert('That file is not a valid backup.'); }
+  if (j.app !== 'landlord-desk' || !(j.data || j.encrypted)) return alert('That file is not a Narly Properties backup.');
+  if (j.encrypted) {
+    const pw = await askPassword('Password-protected backup', 'Enter the password that was in use when this backup was made.'); if (pw == null) return;
+    try { const key = await Crypt.derive(pw, b64ToU8(j.salt), j.iter);
+      const exp = j.exported; j = JSON.parse(new TextDecoder().decode(await Crypt.dec(key, {iv:b64ToU8(j.iv), ct:b64ToU8(j.ct)}))); j.exported = j.exported || exp;
+    } catch { return alert('Wrong password – the backup could not be opened.'); }
+  }
+  if (!confirm(`Restore backup from ${new Date(j.exported).toLocaleString('en-GB')}?\nThis REPLACES everything currently in the app on this device.`)) return;
+  await DB.clear('files');
+  for (const e of ENTITIES) { DB.data[e] = j.data[e] || []; await DB.save(e); }
+  DB.data.filesIndex = [];
+  for (const f of j.files || []) { const {data, ...meta} = f; await DB.fput(meta.id, b64ToBlob(data, meta.type)); DB.data.filesIndex.push(meta); }
+  await DB.save('filesIndex');
+  DB.data.settings = {...(j.settings || {}), lastBackup: (j.settings || {}).lastBackup}; await DB.save('settings');
+  toast('Backup restored'); location.hash = '#/dashboard'; route();
+}
+function csvOf(rows) { return rows.map(r => r.map(v => { v = String(v ?? ''); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }).join(',')).join('\r\n'); }
+function exportCSV(e) {
+  const S = SCHEMAS[e], fs = S.fields.filter(f => f.t !== 'section');
+  const rows = [fs.map(f => f.l), ...all(e).map(r => fs.map(f => f.t === 'ref' ? titleOf(f.to, r[f.k]) : f.t === 'refs' ? (r[f.k] || []).map(i => titleOf(f.to, i)).join('; ') : f.t === 'checkbox' ? (r[f.k] ? 'Yes' : 'No') : r[f.k]))];
+  download(`${e}-${todayStr()}.csv`, csvOf(rows), 'text/csv');
+}
+function exportYearCSV(ty) {
+  const from = `${ty}-04-06`, to = `${ty + 1}-04-05`, inYr = d => d && d >= from && d <= to;
+  const rows = [['Date','Type','Property','Category / tenancy','Amount','Notes']];
+  for (const p of all('payments').filter(p => inYr(p.date))) { const t = byId('tenancies', p.tenancy) || {}; rows.push([p.date, 'Income', propName(t.property), 'Rent – ' + tenantNames(t), p.amount, p.notes]); }
+  for (const x of all('expenses').filter(x => inYr(x.date))) rows.push([x.date, 'Expense', x.property ? propName(x.property) : 'Portfolio', x.category, -x.amount, [x.supplier, x.notes].filter(Boolean).join(' – ')]);
+  rows.splice(1, rows.length, ...rows.slice(1).sort((a, b) => a[0].localeCompare(b[0])));
+  download(`tax-year-${ty}-${ty + 1}.csv`, csvOf(rows), 'text/csv');
+}
+function exportICS() {
+  const ev = [], add = (date, title, desc = '') => { if (date) ev.push({date, title, desc}); };
+  for (const p of all('properties')) {
+    for (const ct of CERT_TYPES) { const c = latestCert(p.id, ct.v); if (c && c.expiryDate) add(c.expiryDate, `${ct.l} expires – ${p.name}`, addr(p)); }
+    add(p.fixEnd, `Mortgage fixed rate ends – ${p.name}`);
+    const ins = all('inspections').filter(i => i.property === p.id && i.nextDue).sort((a, b) => b.date.localeCompare(a.date))[0];
+    if (ins) add(ins.nextDue, `Inspection due – ${p.name}`);
+  }
+  for (const t of all('tenancies').filter(t => t.status !== 'Ended')) { add(t.rentReviewDate, `Rent review – ${propName(t.property)}`); add(t.noticeExpiry, `Notice ends – ${propName(t.property)}`, tenantNames(t)); }
+  for (const tn of all('tenants')) add(tn.rtrExpiry, `Right to Rent follow-up check – ${SCHEMAS.tenants.title(tn)}`);
+  for (const t of all('tasks').filter(t => !t.done)) add(t.due, t.title, t.property ? propName(t.property) : '');
+  const e = s => String(s).replace(/[\\;,]/g, m => '\\' + m).replace(/\n/g, '\\n');
+  const stamp = new Date().toISOString().replace(/[-:]/g, '').slice(0, 15) + 'Z';
+  const body = ev.map((x, i) => ['BEGIN:VEVENT', `UID:ld-${i}-${x.date}-${x.title.length}@landlord-desk`, `DTSTAMP:${stamp}`,
+    `DTSTART;VALUE=DATE:${x.date.replace(/-/g, '')}`, `DTEND;VALUE=DATE:${addDays(x.date, 1).replace(/-/g, '')}`, `SUMMARY:${e(x.title)}`, `DESCRIPTION:${e(x.desc)}`,
+    'BEGIN:VALARM', 'TRIGGER:-P30D', 'ACTION:DISPLAY', `DESCRIPTION:${e(x.title)}`, 'END:VALARM', 'BEGIN:VALARM', 'TRIGGER:-P7D', 'ACTION:DISPLAY', `DESCRIPTION:${e(x.title)}`, 'END:VALARM', 'END:VEVENT'].join('\r\n'));
+  if (!ev.length) return alert('No dated items to export yet.');
+  download('narly-properties-reminders.ics', ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Narly Properties//EN', 'CALSCALE:GREGORIAN', ...body, 'END:VCALENDAR'].join('\r\n'), 'text/calendar');
+  toast(`${ev.length} reminders exported`);
+}
+async function loadDemo() {
+  if (all('properties').length && !confirm('Add example records alongside your existing data?')) return;
+  const T = todayStr(), m = n => addMonths(T, n);
+  const p1 = await upsert('properties', {name:'Elm Street flat', address1:'Flat 2, 14 Elm Street', town:'Leeds', postcode:'LS6 1AA', nation:'England', type:'Flat', bedrooms:2, furnished:'Part furnished', hasGas:true, council:'Leeds City Council', councilTaxBand:'B', lender:'Example Bank', fixEnd:m(2), targetRent:950, availability:'Vacant'});
+  const p2 = await upsert('properties', {name:'Oak Road house', address1:'27 Oak Road', town:'Cardiff', postcode:'CF5 2BB', nation:'Wales', type:'House', bedrooms:3, furnished:'Unfurnished', hasGas:false, council:'Cardiff Council', councilTaxBand:'D', availability:'Vacant'});
+  const gas = await upsert('contacts', {name:'Sam Patel', company:'Patel Heating', role:'Gas engineer', phone:'07700 900123', regNumber:'Gas Safe 123456'});
+  await upsert('certificates', {property:p1.id, certType:'gas', issueDate:m(-11), expiryDate:addMonths(m(-11), 12), provider:'Patel Heating', regNumber:'123456', result:'Pass'});
+  await upsert('certificates', {property:p1.id, certType:'eicr', issueDate:m(-30), expiryDate:addMonths(m(-30), 60), result:'Satisfactory'});
+  await upsert('certificates', {property:p1.id, certType:'epc', issueDate:m(-50), expiryDate:addMonths(m(-50), 120), result:'C'});
+  await upsert('certificates', {property:p1.id, certType:'alarms', issueDate:m(-6), expiryDate:m(6), result:'All working'});
+  await upsert('certificates', {property:p1.id, certType:'insurance', issueDate:m(-13), expiryDate:m(-1), reference:'LL-55512'});
+  await upsert('certificates', {property:p2.id, certType:'epc', issueDate:m(-20), expiryDate:addMonths(m(-20), 120), result:'D'});
+  const a = await upsert('tenants', {firstName:'Alex', lastName:'Morgan', email:'alex@example.com', phone:'07700 900456', referencing:'Passed', rtrDate:m(-8), rtrMethod:'Home Office online share code', rtrExpiry:m(1)});
+  const b = await upsert('tenants', {firstName:'Jo', lastName:'Morgan', email:'jo@example.com', phone:'07700 900789', referencing:'Passed', rtrDate:m(-8), rtrMethod:'Manual document check'});
+  const t = await upsert('tenancies', {property:p1.id, tenants:[a.id, b.id], status:'Active', type:'Assured periodic tenancy (England)', startDate:addDays(m(-8), 0), rent:950, frequency:'Monthly', paymentMethod:'Standing order', deposit:1090, depositReceived:m(-8), depositScheme:'DPS – custodial', depositRef:'DPS-889911', depositProtectedDate:addDays(m(-8), 10), prescribedInfoDate:addDays(m(-8), 10), rentReviewDate:m(1),
+    onboarding:Object.fromEntries(ONBOARD.slice(0, 18).map(([k]) => [k, {done:true, date:m(-8)}]))});
+  for (let i = 8; i >= 1; i--) await upsert('payments', {tenancy:t.id, date:addDays(m(-i), 1), amount:950, method:'Standing order', period:''});
+  await upsert('viewings', {property:p2.id, when:addDays(T, 3) + 'T17:30', name:'Chris Lee', phone:'07700 900321', source:'OpenRent', status:'Booked'});
+  await upsert('maintenance', {property:p1.id, title:'Kitchen tap dripping', reported:addDays(T, -5), priority:'Routine', status:'Contractor booked', contractor:gas.id, booked:addDays(T, 4)});
+  await upsert('inspections', {property:p1.id, date:m(-3), type:'Routine inspection', condition:'Good', alarmsOk:true, nextDue:addDays(T, 10)});
+  await upsert('utilities', {property:p1.id, utility:'Electricity', supplier:'Example Energy', responsible:'Tenant', meterId:'MPAN 12 3456 7890 123'});
+  await upsert('expenses', {property:p1.id, date:m(-11), amount:85, category:'Certificates & safety checks', supplier:'Patel Heating', notes:'Gas safety check'});
+  await upsert('expenses', {property:p1.id, date:m(-2), amount:310, category:'Mortgage interest', supplier:'Example Bank'});
+  await upsert('tasks', {title:'Renew landlord insurance for Elm Street', property:p1.id, due:addDays(T, 2)});
+  toast('Example data added'); location.hash = '#/dashboard'; route();
+}
+
+/* ================= Theme (Automatic / Light / Dark) ================= */
+const THEMES = {auto:['auto', 'Automatic (follows your device)'], light:['sun', 'Light'], dark:['moon', 'Dark']};
+const getTheme = () => { try { return localStorage.getItem('narly-theme') || 'auto'; } catch { return 'auto'; } };
+function applyTheme(t) {
+  try { if (t === 'auto') localStorage.removeItem('narly-theme'); else localStorage.setItem('narly-theme', t); } catch {}
+  if (t === 'auto') delete document.documentElement.dataset.theme; else document.documentElement.dataset.theme = t;
+  const dark = t === 'dark' || (t === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches);
+  $$('meta[name=theme-color]').forEach(m => { m.removeAttribute('media'); m.content = dark ? '#0a0a0a' : '#ffffff'; });
+  $$('[data-act=theme]').forEach(b => { const [ic, l] = THEMES[t]; b.innerHTML = ico(ic) + '<span class="sr">' + l + '</span>'; b.title = 'Theme: ' + l + ' (click to change)'; });
+}
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => applyTheme(getTheme()));
+
+/* ================= Events ================= */
+const ACTIONS = {
+  closeModal, print: () => print(),
+  theme: () => { const order = ['auto', 'light', 'dark'], next = order[(order.indexOf(getTheme()) + 1) % 3]; applyTheme(next); toast('Theme: ' + THEMES[next][1]); }, backup, ics: exportICS, demo: loadDemo,
+  csv: el => exportCSV(el.dataset.e), csvYear: el => exportYearCSV(+el.dataset.y),
+  edit: el => openForm(el.dataset.e, byId(el.dataset.e, el.dataset.id)),
+  openFile: el => openFile(el.dataset.id),
+  delFile: async el => { if (!confirm('Remove this attachment?')) return; await deleteFile(el.dataset.id); const li = el.closest('li'); if (li && $('#modal:not(.hidden)')) li.remove(); else route(); },
+  setStatus: async el => { const t = byId('tenancies', el.dataset.id); const r = {...t, status:el.dataset.s};
+    if (el.dataset.s === 'Notice given') { openForm('tenancies', r); setTimeout(() => { const f = $('#recForm [name=noticeBy]'); if (f) f.scrollIntoView({block:'center'}); }, 50); return; }
+    if (el.dataset.s === 'Ended' && !r.endDate) r.endDate = r.noticeExpiry || todayStr();
+    await upsert('tenancies', r); toast('Status: ' + r.status); route(); },
+  wipe: async () => { if (!confirm('Delete ALL properties, tenants, documents and settings on this device?')) return; if (prompt('Type DELETE to confirm') !== 'DELETE') return;
+    for (const e of ENTITIES) { DB.data[e] = []; await DB.save(e); } await DB.clear('files'); DB.data.filesIndex = []; await DB.save('filesIndex'); toast('All data deleted'); location.hash = '#/dashboard'; route(); },
+};
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-act],[data-add],[data-open]'); if (!t) return;
+  if (t.dataset.act) { e.preventDefault(); ACTIONS[t.dataset.act] && ACTIONS[t.dataset.act](t, e); return; }
+  if (t.dataset.add) { e.preventDefault(); openForm(t.dataset.add, t.dataset.pre ? JSON.parse(t.dataset.pre) : {}); return; }
+  if (t.dataset.open) { e.preventDefault(); const [en, id] = t.dataset.open.split(':'); const S = SCHEMAS[en];
+    if (S.detail) location.hash = `#/${S.detail}/${id}`; else { const r = byId(en, id); if (r) openForm(en, r); } }
+});
+document.addEventListener('change', async e => {
+  const el = e.target;
+  if (el.dataset.ck || el.dataset.ckd) {
+    const [id, key, k] = (el.dataset.ck || el.dataset.ckd).split('|'); const t = byId('tenancies', id); t[key] = t[key] || {}; const s = t[key][k] = t[key][k] || {};
+    if (el.dataset.ck) { s.done = el.checked; if (el.checked && !s.date) s.date = todayStr(); } else { s.date = el.value; if (el.value) s.done = true; }
+    await upsert('tenancies', t); route(); return;
+  }
+  if (el.dataset.actChange === 'restore' && el.files[0]) { await restore(el.files[0]); el.value = ''; }
+  if (el.dataset.actChange === 'uploadGeneral') { for (const f of el.files) await addFile('general', f); toast('Uploaded'); route(); }
+});
+document.addEventListener('input', e => {
+  if (e.target.matches('[data-filter]')) { const q = e.target.value.toLowerCase(); const tb = e.target.parentElement.querySelector('tbody'); if (tb) $$('tr', tb).forEach(tr => tr.style.display = tr.textContent.toLowerCase().includes(q) ? '' : 'none'); }
+});
+document.addEventListener('submit', async e => {
+  if (/^auth/.test(e.target.id)) { e.preventDefault(); if (e.target.reportValidity()) await handleAuthForm(e.target); return; }
+  if (e.target.id === 'setForm') { e.preventDefault(); const f = e.target; DB.data.settings.landlordName = f.landlordName.value.trim(); DB.data.settings.warnDays = +f.warnDays.value || 60; await DB.save('settings'); toast('Settings saved'); route(); }
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('#modal').classList.contains('hidden')) closeModal(); });
+$('#menuBtn').onclick = () => $('#nav').classList.toggle('open');
+$('#globalSearch').addEventListener('keydown', e => { if (e.key === 'Enter') location.hash = '#/search/' + encodeURIComponent(e.target.value); });
+window.addEventListener('hashchange', route);
+
+$('#lockBtn').onclick = lockNow;
+applyTheme(getTheme());
+function startApp() { route(); startAutoLock(); }
+(async function init() {
+  let auth;
+  try { await DB.open(); auth = await DB.get('kv', 'auth'); if (!(auth && auth.enabled)) await DB.load(); }
+  catch (err) { $('#main').innerHTML = `<div class="notice bad">This browser blocked local storage (${esc(err.message || err)}). Try another browser, or turn off private browsing.</div>`; return; }
+  if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => {});
+  if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js').catch(() => {});
+  if (auth && auth.enabled) { if (!Crypt.ok()) { document.body.innerHTML = '<p style="padding:20px">This browser cannot open password-protected data. Use an up-to-date Chrome, Edge, Firefox or Safari.</p>'; return; } showLogin(auth); }
+  else startApp();
+})();
+</script>
+</body>
+</html>
